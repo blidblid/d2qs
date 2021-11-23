@@ -1,0 +1,44 @@
+@mixin focused($white, $black) {
+  .focusable,
+  .hoverable {
+    outline: none;
+    position: relative;
+
+    &::before {
+      z-index: 1;
+      position: absolute;
+      pointer-events: none;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+    }
+
+    @include at-focused-border($black);
+
+    .app-dark & {
+      @include at-focused-border($white);
+    }
+  }
+
+  .focusable {
+    &:focus {
+      &::before {
+        content: '';
+      }
+    }
+  }
+
+  .hoverable {
+    &:hover {
+      &::before {
+        content: '';
+      }
+    }
+  }
+}
+
+@mixin at-focused-border($color) {
+  &::before {
+    border-bottom: 3px solid $color;
+  }
+}

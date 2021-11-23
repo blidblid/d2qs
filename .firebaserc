@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "d2queue": {
+      "hosting": {
+        "d2queue": [
+          "d2queue"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "d2queue"
+  }
+}

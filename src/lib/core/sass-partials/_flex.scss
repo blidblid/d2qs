@@ -1,0 +1,35 @@
+$flex-props: flex-start flex-end center space-between space-around baseline;
+
+.flex {
+  display: flex !important;
+
+  &.d-column {
+    flex-direction: column !important;
+  }
+
+  &.d-column-reverse {
+    flex-direction: column-reverse !important;
+  }
+
+  &.d-row-reverse {
+    flex-direction: row-reverse !important;
+  }
+
+  &.w-wrap {
+    flex-wrap: wrap;
+  }
+
+  @each $prop in $flex-props {
+    &.j-#{$prop} {
+      justify-content: $prop;
+    }
+
+    &.a-#{$prop} {
+      align-items: $prop;
+    }
+  }
+
+  .f-1 {
+    flex: 1;
+  }
+}

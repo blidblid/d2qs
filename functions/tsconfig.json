@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "skipLibCheck": true
+  },
+  "compileOnSave": true,
+  "files": ["node_modules/typescript/lib/lib.es6.d.ts", "./src/index.ts"],
+  "exclude": ["node_modules"]
+}

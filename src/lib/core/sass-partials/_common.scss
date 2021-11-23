@@ -1,0 +1,68 @@
+.c-pointer {
+  cursor: pointer;
+}
+
+.c-default {
+  cursor: default;
+}
+
+.p-relative {
+  position: relative;
+}
+
+.pe-none {
+  pointer-events: none;
+}
+
+.p-absolute {
+  position: absolute;
+}
+
+.z-index {
+  z-index: 2;
+}
+
+.d-block {
+  display: block;
+}
+
+.d-none.d-none {
+  display: none !important;
+}
+
+.o-none {
+  outline: none;
+}
+
+.o-auto {
+  overflow: overlay;
+}
+
+.o-hidden {
+  overflow: hidden;
+}
+
+.medium-opaque {
+  opacity: 0.5 !important;
+}
+
+.small-opaque {
+  opacity: 0.3 !important;
+}
+
+.opaque {
+  opacity: 1 !important;
+}
+
+.z1 {
+  z-index: 1;
+}
+
+.small-border {
+  border-width: 3px;
+  border-style: solid;
+}
+
+.invert {
+  filter: invert(1);
+}

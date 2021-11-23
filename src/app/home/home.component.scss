@@ -1,0 +1,23 @@
+.app-home {
+  padding: 16px 32px 32px;
+  box-sizing: border-box;
+  overflow: auto;
+
+  .app-mobile & {
+    padding: 16px 1px 1px;
+  }
+
+  .app-home-toolbar {
+    margin-bottom: 16px;
+  }
+
+  .mat-form-field:not(.mat-form-field-invalid) {
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
+
+  .mat-table {
+    padding-top: 32px;
+  }
+}

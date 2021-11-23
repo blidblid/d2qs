@@ -1,0 +1,61 @@
+$distances: 0 2 4 8 12 16 32 64;
+
+.h-100 {
+  height: 100% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.m-auto {
+  margin: 16px auto;
+}
+
+.d-none {
+  display: none;
+}
+
+.emoji {
+  font-size: 20px !important;
+}
+
+.size-card {
+  min-width: 170px;
+  min-height: 244px;
+}
+
+.size-icon {
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+}
+
+@each $prop in $distances {
+  .p-#{$prop} {
+    padding: $prop + 0px !important;
+  }
+
+  .m-#{$prop} {
+    padding: $prop + 0px !important;
+  }
+
+  .hs-#{$prop} {
+    > * + * {
+      margin-left: $prop + 0px !important;
+    }
+  }
+
+  .vs-#{$prop} {
+    > * + * {
+      margin-top: $prop + 0px !important;
+    }
+  }
+
+  .s-#{$prop} {
+    > * {
+      margin: $prop + 0px !important;
+    }
+  }
+}

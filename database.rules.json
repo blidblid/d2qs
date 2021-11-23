@@ -1,0 +1,21 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$uid": {
+        ".write": "auth !== null && $uid === auth.uid",
+        ".read": true
+      }
+    },
+    "queries": {
+      ".read": true,
+      "$id": {
+        ".write": "auth !== null && auth.uid === $id"
+      }
+    },
+    "games": {
+      ".read": true
+    }
+  }
+}

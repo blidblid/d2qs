@@ -1,0 +1,51 @@
+.app-queue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .mat-tab-group {
+    max-height: 70vh;
+    max-width: 60vw;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+
+    .app-huge & {
+      max-width: 50vw;
+    }
+
+    .app-small & {
+      max-height: 80vh;
+      max-width: 80vw;
+    }
+
+    .app-mobile & {
+      padding: 0;
+      max-height: 100%;
+      max-width: 100%;
+    }
+
+    .app-queue-form {
+      padding: 16px 0;
+
+      .app-mobile & {
+        padding: 16px 0;
+      }
+    }
+
+    .app-mobile & {
+      max-height: unset;
+    }
+  }
+
+  .mat-form-field-infix {
+    width: 130px;
+  }
+
+  .mat-radio-button {
+    display: block;
+  }
+}

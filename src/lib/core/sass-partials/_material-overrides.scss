@@ -1,0 +1,29 @@
+@mixin theme($theme) {
+  $background: map-get($theme, 'background');
+  $foreground: map-get($theme, 'foreground');
+
+  .mat-tab-group {
+    box-shadow: none;
+    border: 4px solid map-get($foreground, 'disabled-button');
+    background: map-get($background, card);
+    color: map-get($foreground, text);
+
+    .mat-tab-body-wrapper {
+      height: 100%;
+    }
+
+    .mat-tab-body-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-mobile & {
+      border: 1px solid map-get($foreground, 'disabled-button');
+      padding: 0;
+    }
+
+    .mat-tab-header {
+      width: 100%;
+    }
+  }
+}

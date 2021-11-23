@@ -1,0 +1,43 @@
+@use '~@angular/material' as mat;
+@use './app/home/home-theme';
+@use './lib/core/sass-partials/material-overrides';
+@use './lib/components/logo/logo-theme';
+@include mat.core();
+
+@import './lib/core/sass-partials/common';
+@import './lib/core/sass-partials/flex';
+@import './lib/core/sass-partials/size';
+@import './lib/core/sass-partials/font';
+
+$primary: mat.define-palette(mat.$orange-palette, 400);
+$accent: mat.define-palette(mat.$red-palette, A200);
+$warn: mat.define-palette(mat.$red-palette);
+
+$theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+  )
+);
+
+@include home-theme.theme($theme);
+@include logo-theme.theme($theme);
+@include material-overrides.theme($theme);
+@include mat.all-component-themes($theme);
+
+@font-face {
+  font-family: 'diablo';
+  src: URL('assets/fonts/diablo.ttf') format('truetype');
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
