@@ -11,18 +11,16 @@ import {
   TYPE_LOCALE,
   UserService,
 } from '@d2queue/api';
+import firebase from 'firebase/compat/app';
 import { from, of } from 'rxjs';
 import { filter, map, pluck, shareReplay, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GameRx {
   game$ = this.authService.firebaseUser$.pipe(
-    switchMap((user) => {
-      return user ? this.userService.getProperty(user.uid, 'gameId') : of(null);
-    }),
-    switchMap((gameId) => {
-      return gameId ? this.gameService.get(gameId) : of(null);
-    }),
+    filter((user): user is firebase.User => user !== null),
+    switchMap((user) => this.userService.getProperty(user.uid, 'gameId')),
+    switchMap((gameId) => (gameId ? this.gameService.get(gameId) : of(null))),
     shareReplay(1)
   );
 

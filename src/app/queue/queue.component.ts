@@ -6,8 +6,8 @@ import {
 import { AuthService, UserService } from '@d2queue/api';
 import { Operators } from '@d2queue/components';
 import { Rx } from '@d2queue/rx';
-import { EMPTY, merge, Subject } from 'rxjs';
-import { map, skip, switchMap } from 'rxjs/operators';
+import { merge, Subject } from 'rxjs';
+import { map, skip } from 'rxjs/operators';
 
 @Component({
   selector: 'app-queue',
@@ -23,12 +23,9 @@ export class QueueComponent {
   private selectedIndexSub = new Subject<number>();
 
   selectedIndex$ = merge(
-    this.authService.firebaseUser$.pipe(
-      switchMap((user) => {
-        return user ? this.userService.getProperty(user.uid, 'gameId') : EMPTY;
-      }),
-      map((gameId) => (gameId ? 2 : 0)),
-      skip(1)
+    this.rx.game.game$.pipe(
+      skip(1),
+      map((game) => (game ? 1 : 0))
     ),
     this.selectedIndexSub
   );

@@ -130,9 +130,6 @@ export class QueryOperators {
     inputs: {
       label: 'Queue',
       connect: this.rx.query.queueTrigger$,
-      hint: this.authService.isSignedIn$.pipe(
-        map((isSignedIn) => (isSignedIn ? '' : 'Log in to queue'))
-      ),
       disabled: combineLatest([
         this.authService.isSignedIn$,
         this.rx.query.hasErrors$,

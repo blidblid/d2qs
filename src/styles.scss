@@ -36,6 +36,7 @@ $theme: mat.define-dark-theme(
 html,
 body {
   height: 100%;
+  user-select: none;
 }
 body {
   margin: 0;

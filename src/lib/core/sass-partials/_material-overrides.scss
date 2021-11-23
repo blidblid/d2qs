@@ -2,6 +2,10 @@
   $background: map-get($theme, 'background');
   $foreground: map-get($theme, 'foreground');
 
+  .mat-form-field {
+    user-select: auto;
+  }
+
   .mat-tab-group {
     box-shadow: none;
     border: 4px solid map-get($foreground, 'disabled-button');
