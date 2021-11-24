@@ -3,6 +3,10 @@
   box-sizing: border-box;
   overflow: auto;
 
+  .app-home-toolbar-spacer {
+    width: 40px;
+  }
+
   .app-mobile & {
     padding: 16px 1px 1px;
   }
