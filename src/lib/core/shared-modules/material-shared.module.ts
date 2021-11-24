@@ -1,10 +1,12 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgModule } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -48,6 +50,12 @@ const materialModules = [
 
 const cdkModules = [DragDropModule];
 
+export class ShowAllErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null): boolean {
+    return !!(control && control.invalid);
+  }
+}
+
 @NgModule({
   imports: [...materialModules, ...cdkModules],
   exports: [...materialModules, ...cdkModules],
@@ -55,6 +63,10 @@ const cdkModules = [DragDropModule];
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },
+    },
+    {
+      provide: ErrorStateMatcher,
+      useClass: ShowAllErrorStateMatcher,
     },
   ],
 })

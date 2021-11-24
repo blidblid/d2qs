@@ -12,19 +12,19 @@ export interface User extends Entity, Preferences {
   gameId?: string;
 }
 
-export const FALLBACK_NICK = 'Warriv';
+export const FALLBACK_NICK = '';
 
 export type Region = 'eu' | 'us' | 'asia';
 export const EU = 'eu';
 export const US = 'us';
 export const ASIA = 'asia';
 export const FALLBACK_REGION = EU;
-export const ALL_REGIONS = [EU, US, ASIA];
 export const REGION_LOCALE = {
   [EU]: 'EU',
   [US]: 'US',
   [ASIA]: 'Asia',
 };
+export const ALL_REGIONS = Object.keys(REGION_LOCALE) as Region[];
 
 export type Area =
   | 'ancient_tunnels'
@@ -74,22 +74,7 @@ export const AREA_LOCALE: Record<Area, string> = {
   [RIVER_OF_FLAME]: 'River of Flame',
   [WORLDSTONE_KEEP]: 'Worldstone Keep',
 };
-export const ALL_AREAS: Area[] = [
-  ANCIENT_TUNNELS,
-  ANDARIEL,
-  ARCANE_SANCTUARY,
-  BAAL,
-  COUNTESS,
-  COW,
-  DIABLO,
-  LOWER_KURAST,
-  MAUSOLEUM,
-  NIHLATHAK,
-  MEPHISTO,
-  PIT,
-  RIVER_OF_FLAME,
-  WORLDSTONE_KEEP,
-];
+export const ALL_AREAS = Object.keys(AREA_LOCALE) as Area[];
 export const RUN_AREAS: Area[] = ['baal', 'diablo', 'cow'];
 
 export type RefreshMode = 'auto' | 'manual';

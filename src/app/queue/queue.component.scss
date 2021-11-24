@@ -5,6 +5,19 @@
   justify-content: center;
   height: 100%;
 
+  .app-queue-attention {
+    animation: 0.4s jump ease infinite alternate;
+
+    @keyframes jump {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-4px);
+      }
+    }
+  }
+
   .mat-tab-group {
     max-height: 70vh;
     max-width: 60vw;

@@ -38,7 +38,7 @@
 
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>settings</mat-icon>
+      <mat-icon [class.app-queue-attention]="rx.user.hasErrors$ | async">settings</mat-icon>
     </ng-template>
 
     <berg-outlet class="app-queue-preferences app-queue-form flex a-baseline w-wrap s-8"

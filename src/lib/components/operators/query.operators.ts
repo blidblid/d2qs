@@ -133,7 +133,12 @@ export class QueryOperators {
       disabled: combineLatest([
         this.authService.isSignedIn$,
         this.rx.query.hasErrors$,
-      ]).pipe(map(([isSignedIn, hasErrors]) => hasErrors || !isSignedIn)),
+        this.rx.user.hasErrors$,
+      ]).pipe(
+        map(([isSignedIn, hasQueryErrors, hasUserErrors]) => {
+          return !isSignedIn || hasQueryErrors || hasUserErrors;
+        })
+      ),
     },
   });
 
