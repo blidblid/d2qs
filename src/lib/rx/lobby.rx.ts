@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { userTrigger } from '@berglund/rx';
 import {
+  AuthService,
   AUTO_REFRESH_TIME,
   FALLBACK_NICK,
   FALLBACK_REGION,
@@ -17,13 +18,14 @@ import {
   filter,
   map,
   share,
+  shareReplay,
   startWith,
   switchMap,
   take,
   throttleTime,
   withLatestFrom,
 } from 'rxjs/operators';
-import { QueryRx } from '.';
+import { QueryRx } from './query.rx';
 import { UserRx } from './user.rx';
 
 @Injectable({ providedIn: 'root' })
@@ -42,36 +44,38 @@ export class LobbyRx {
     throttleTime(REFRESH_THROTTLE_TIME)
   );
 
-  private lobbies = merge(
-    this.refresh$,
-    this.queryRx.queueTrigger$,
-    this.queryRx.stopTrigger$,
-    this.joinTrigger$
-  ).pipe(
-    startWith(null),
-    switchMap(() => {
-      return this.queryService.getAll().pipe(
-        filter((queries): queries is Query[] => Array.isArray(queries)),
-        map(toLobbies),
-        take(2)
-      );
-    })
+  private queries$ = this.queryService.getAll().pipe(
+    filter((queries): queries is Query[] => Array.isArray(queries)),
+    map(toLobbies),
+    // do not refCount to keep the firebase websocket open indefinitely,
+    // it should create less traffic then recreating the websocket over and over again
+    shareReplay({ refCount: false, bufferSize: 1 })
   );
 
-  regionLobbies$ = combineLatest([this.lobbies, this.userRx.region$]).pipe(
+  private lobbies$ = merge(
+    this.refresh$.pipe(map(() => 1)),
+    this.queryRx.queueTrigger$.pipe(map(() => 2)),
+    this.queryRx.stopTrigger$.pipe(map(() => 2)),
+    this.joinTrigger$.pipe(map(() => 2))
+  ).pipe(
+    startWith(1),
+    switchMap((takeCount) => this.queries$.pipe(take(takeCount)))
+  );
+
+  regionLobbies$ = combineLatest([this.lobbies$, this.userRx.region$]).pipe(
     map(([lobbies, region]) => {
       return lobbies.filter((lobby) => lobby.region === region);
     })
   );
 
   joinedLobby$ = this.joinTrigger$.pipe(
-    withLatestFrom(this.userService.user$),
-    switchMap(([lobby, user]) => {
-      return user
-        ? this.queryService.set(user.id, {
+    withLatestFrom(this.userService.user$, this.authService.firebaseUser$),
+    switchMap(([lobby, user, firebaseUser]) => {
+      return user && firebaseUser
+        ? this.queryService.set(firebaseUser.uid, {
             act: lobby.act,
             type: lobby.type,
-            playerId: user.id,
+            playerId: firebaseUser.uid,
             quest: lobby.quest,
             areas: lobby.areas,
             runArea: lobby.runArea,
@@ -86,6 +90,7 @@ export class LobbyRx {
   );
 
   constructor(
+    private authService: AuthService,
     private queryService: QueryService,
     private userRx: UserRx,
     private userService: UserService,
