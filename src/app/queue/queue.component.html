@@ -1,23 +1,21 @@
 <mat-tab-group [selectedIndex]="selectedIndex$ | async"
                (selectedIndexChange)="_onSelectedIndexChange($event)">
   <mat-tab label="Lobbies">
-    <div class="app-queue-lobbies app-queue-form">
-      <div class="flex w-wrap s-8">
-        <berg-outlet [component]="operators.query.difficulty"></berg-outlet>
-        <berg-outlet [component]="operators.query.type"></berg-outlet>
+    <div class="app-queue-form">
+      <berg-outlet [component]="operators.query.difficulty"></berg-outlet>
+      <berg-outlet [component]="operators.query.type"></berg-outlet>
 
-        <berg-outlet [component]="operators.query.act$ | async"></berg-outlet>
-        <berg-outlet [component]="operators.query.quest$ | async"></berg-outlet>
-        <berg-outlet [component]="operators.query.runArea$ | async"></berg-outlet>
+      <berg-outlet [component]="operators.query.act$ | async"></berg-outlet>
+      <berg-outlet [component]="operators.query.quest$ | async"></berg-outlet>
+      <berg-outlet [component]="operators.query.runArea$ | async"></berg-outlet>
 
-        <berg-outlet [component]="operators.query.maxPlayers"></berg-outlet>
-      </div>
+      <berg-outlet [component]="operators.query.maxPlayers"></berg-outlet>
+    </div>
 
-      <div class="flex w-wrap s-8">
-        <berg-outlet [component]="operators.query.queueTrigger"></berg-outlet>
-        <berg-outlet [component]="operators.query.stopTrigger"></berg-outlet>
-        <berg-outlet [component]="operators.lobby.refreshTrigger"></berg-outlet>
-      </div>
+    <div class="app-queue-actions flex s-8">
+      <berg-outlet [component]="operators.query.queueTrigger"></berg-outlet>
+      <berg-outlet [component]="operators.query.stopTrigger"></berg-outlet>
+      <berg-outlet [component]="operators.lobby.refreshTrigger"></berg-outlet>
     </div>
 
     <berg-outlet class="f-1 o-auto"
@@ -27,13 +25,20 @@
 
   <mat-tab *ngIf="rx.game.game$ | async"
            label="Game">
-    <div class="app-queue-game app-queue-form">
-      <berg-outlet class="flex a-baseline w-wrap s-8"
-                   [component]="operators.game.all$ | async">
-      </berg-outlet>
-
-      <berg-outlet [component]="operators.game.players"></berg-outlet>
+    <div class="app-queue-form">
+      <berg-outlet [component]="operators.game.hostNick"></berg-outlet>
+      <berg-outlet [component]="operators.game.gameName"></berg-outlet>
+      <berg-outlet [component]="operators.game.password"></berg-outlet>
+      <berg-outlet [component]="operators.game.type"></berg-outlet>
+      <berg-outlet [component]="operators.game.difficulty"></berg-outlet>
+      <berg-outlet [component]="operators.game.act$ | async"></berg-outlet>
+      <berg-outlet [component]="operators.game.quest$ | async"></berg-outlet>
+      <berg-outlet [component]="operators.game.runArea$ | async"></berg-outlet>
     </div>
+
+    <berg-outlet class="f-1  o-auto"
+                 [component]="operators.game.players">
+    </berg-outlet>
   </mat-tab>
 
   <mat-tab>
@@ -41,8 +46,11 @@
       <mat-icon [class.app-queue-attention]="rx.user.hasErrors$ | async">settings</mat-icon>
     </ng-template>
 
-    <berg-outlet class="app-queue-preferences app-queue-form flex a-baseline w-wrap s-8"
-                 [component]="operators.user.all">
-    </berg-outlet>
+    <div class="app-queue-form">
+      <berg-outlet [component]="operators.user.nick"></berg-outlet>
+      <berg-outlet [component]="operators.user.region"></berg-outlet>
+      <berg-outlet [component]="operators.user.refreshMode"></berg-outlet>
+      <berg-outlet [component]="operators.user.areas"></berg-outlet>
+    </div>
   </mat-tab>
 </mat-tab-group>

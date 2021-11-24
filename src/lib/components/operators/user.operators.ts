@@ -57,7 +57,5 @@ export class UserOperators {
     },
   });
 
-  all = [this.nick, this.region, this.refreshMode, this.areas];
-
   constructor(private rx: Rx) {}
 }

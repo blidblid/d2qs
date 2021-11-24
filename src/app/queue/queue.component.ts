@@ -16,7 +16,7 @@ import { map, skip } from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'app-queue flex d-column f-1',
+    class: 'app-queue flex d-column',
   },
 })
 export class QueueComponent {

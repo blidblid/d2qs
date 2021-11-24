@@ -29,13 +29,14 @@ import { UserRx } from './user.rx';
 
 @Injectable({ providedIn: 'root' })
 export class QueryRx {
-  type$ = userInput<Type>(of(FARM));
+  difficulty$ = userInput<Difficulty>(of(HELL), [Validators.required]);
+  type$ = userInput<Type>(of(FARM), [Validators.required]);
   act$ = userInput<Act>(of(ACT_1));
   quest$ = userInput<Quest>(of(QUEST_1));
   runArea$ = userInput<Area>(of(BAAL));
 
-  difficulty$ = userInput<Difficulty>(of(HELL));
   maxPlayers$ = userInput<number>(of(8), [
+    Validators.required,
     Validators.min(1),
     Validators.max(8),
   ]);

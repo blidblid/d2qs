@@ -66,32 +66,50 @@ export class GameOperators {
     },
   });
 
-  act = component({
-    component: BergInputComponent,
-    inputs: {
-      readonly: true,
-      connect: this.rx.game.act$,
-      label: 'Starting act',
-    },
-  });
+  act$ = this.rx.game.type$.pipe(
+    map((type) => {
+      return type === 'quest'
+        ? component({
+            component: BergInputComponent,
+            inputs: {
+              readonly: true,
+              connect: this.rx.game.act$,
+              label: 'Starting act',
+            },
+          })
+        : null;
+    })
+  );
 
-  quest = component({
-    component: BergInputComponent,
-    inputs: {
-      readonly: true,
-      connect: this.rx.game.quest$,
-      label: 'Starting quest',
-    },
-  });
+  quest$ = this.rx.game.type$.pipe(
+    map((type) => {
+      return type === 'quest'
+        ? component({
+            component: BergInputComponent,
+            inputs: {
+              readonly: true,
+              connect: this.rx.game.quest$,
+              label: 'Starting quest',
+            },
+          })
+        : null;
+    })
+  );
 
-  runArea = component({
-    component: BergInputComponent,
-    inputs: {
-      readonly: true,
-      connect: this.rx.game.runArea$,
-      label: 'Area',
-    },
-  });
+  runArea$ = this.rx.game.type$.pipe(
+    map((type) => {
+      return type === 'quest'
+        ? component({
+            component: BergInputComponent,
+            inputs: {
+              readonly: true,
+              connect: this.rx.game.runArea$,
+              label: 'Area',
+            },
+          })
+        : null;
+    })
+  );
 
   players = component({
     component: BergTableComponent,
@@ -125,28 +143,6 @@ export class GameOperators {
       },
     },
   });
-
-  all$ = this.rx.game.type$.pipe(
-    map((type) => {
-      const components = [
-        this.hostNick,
-        this.gameName,
-        this.password,
-        this.type,
-        this.difficulty,
-      ];
-
-      if (type === 'quest') {
-        components.push(this.act, this.quest);
-      }
-
-      if (type === 'run') {
-        components.push(this.runArea);
-      }
-
-      return components;
-    })
-  );
 
   constructor(private rx: Rx) {}
 }
