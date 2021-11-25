@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { BergInputComponent, BergSelectComponent } from '@berglund/material';
 import { component } from '@berglund/mixins';
 import {
-  ALL_AREAS,
   ALL_REGIONS,
   Area,
   AREA_LOCALE,
   AUTO,
+  FARM_AREAS,
   MANUAL,
   RefreshMode,
   REFRESH_MODE_LOCALE,
@@ -49,10 +49,10 @@ export class UserOperators {
   areas = component({
     component: BergSelectComponent,
     inputs: {
-      label: 'Your areas',
+      label: 'Farm areas',
       selection: 'multiple',
       connect: this.rx.user.areas$,
-      data: ALL_AREAS,
+      data: FARM_AREAS,
       pluckLabel: (value: Area) => AREA_LOCALE[value],
     },
   });

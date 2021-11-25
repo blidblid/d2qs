@@ -41,6 +41,9 @@ export type Area =
   | 'pindleskin'
   | 'pit'
   | 'river_of_flame'
+  | 'tombs'
+  | 'travincal'
+  | 'tristram'
   | 'worldstone_keep';
 export const ANCIENT_TUNNELS = 'ancient_tunnels';
 export const ANDARIEL = 'andariel';
@@ -56,6 +59,9 @@ export const MEPHISTO = 'mephisto';
 export const PINDLESKIN = 'pindleskin';
 export const PIT = 'pit';
 export const RIVER_OF_FLAME = 'river_of_flame';
+export const TOMBS = 'tombs';
+export const TRAVINCAL = 'travincal';
+export const TRISTRAM = 'tristram';
 export const WORLDSTONE_KEEP = 'worldstone_keep';
 export const AREA_LOCALE: Record<Area, string> = {
   [ANCIENT_TUNNELS]: 'Ancient Tunnels',
@@ -72,10 +78,17 @@ export const AREA_LOCALE: Record<Area, string> = {
   [PINDLESKIN]: 'Pindleskin',
   [PIT]: 'Pit',
   [RIVER_OF_FLAME]: 'River of Flame',
+  [TOMBS]: 'Tombs',
+  [TRAVINCAL]: 'Travincal',
+  [TRISTRAM]: 'Tristram',
   [WORLDSTONE_KEEP]: 'Worldstone Keep',
 };
-export const ALL_AREAS = Object.keys(AREA_LOCALE) as Area[];
-export const RUN_AREAS: Area[] = ['baal', 'diablo', 'cow'];
+const RUN_ONLY_AREAS: Area[] = [TOMBS, TRISTRAM];
+const AREAS = Object.keys(AREA_LOCALE) as Area[];
+export const RUN_AREAS: Area[] = [BAAL, DIABLO, COW, ...RUN_ONLY_AREAS];
+export const FARM_AREAS = AREAS.filter(
+  (area: Area) => !RUN_ONLY_AREAS.includes(area)
+);
 
 export type RefreshMode = 'auto' | 'manual';
 export const AUTO = 'auto';
