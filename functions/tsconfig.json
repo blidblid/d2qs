@@ -7,11 +7,7 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@d2qs/model": ["../src/lib/model"]
-    }
+    "skipLibCheck": true
   },
   "compileOnSave": true,
   "files": ["node_modules/typescript/lib/lib.es6.d.ts", "./src/index.ts"],

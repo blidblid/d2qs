@@ -6,6 +6,10 @@
     user-select: auto;
   }
 
+  .mat-cell {
+    user-select: text;
+  }
+
   .mat-tab-group {
     box-shadow: none;
     border: 4px solid map-get($foreground, 'disabled-button');

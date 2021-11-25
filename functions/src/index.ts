@@ -1,11 +1,16 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { environment } from '../../src/environments/environment.prod';
-import { ALL_AREAS, Area } from '../../src/lib/api/auth/user-model';
-import { Game, Player } from '../../src/lib/api/game/game-model';
-import { Lobby } from '../../src/lib/api/lobby/lobby-model';
-import { toLobbies } from '../../src/lib/api/lobby/lobby-util';
-import { FARM, Query, QUEST } from '../../src/lib/api/query/query-model';
+import {
+  Area,
+  FARM,
+  Game,
+  Lobby,
+  Player,
+  Query,
+  QUEST,
+  toLobbies,
+} from '../../src/lib/model';
 
 admin.initializeApp(environment.firebase);
 
@@ -54,46 +59,28 @@ async function createGame(
 }
 
 function lobbyToPlayers(lobby: Lobby): Player[] {
-  let uniqueAreas = [...ALL_AREAS];
-  const areaCapCount = 5;
-  const averageAreaCount = Math.round(
-    lobby.queries.reduce((acc, curr) => acc + curr.areas.length, 0) /
-      lobby.queries.length
-  );
-  const numberOfAreas = Math.min(areaCapCount, averageAreaCount);
+  const numberOfAreas = 2;
+  const areaDensity: Partial<Record<Area, number>> = {};
 
-  function assignAreas(preference: Area[]): Area[] {
-    let i = numberOfAreas;
-    const areas: Area[] = [];
-
-    while (i--) {
-      const preferredUniqueAreas = uniqueAreas.filter((area) => {
-        return preference.includes(area);
-      });
-
-      const pool = (
-        preferredUniqueAreas.length > 0
-          ? preferredUniqueAreas
-          : ALL_AREAS.filter((area) => preference.includes(area))
-      ).filter((area) => !areas.includes(area));
-
-      if (pool.length === 0) {
-        break;
+  if (lobby.type === 'farm') {
+    for (const query of lobby.queries) {
+      for (const area of query.areas) {
+        areaDensity[area] = (areaDensity[area] ?? 0) + 1;
       }
-
-      const randomArea = pool[Math.floor(Math.random() * pool.length)];
-
-      uniqueAreas = uniqueAreas.filter((area) => area !== randomArea);
-      areas.push(randomArea);
     }
+  }
 
-    return areas;
+  function assignAreas(query: Query): Area[] {
+    return shuffleArray(query.areas)
+      .sort((a, b) => (areaDensity[a] ?? 0) - (areaDensity[b] ?? 0))
+      .slice(0, numberOfAreas)
+      .sort();
   }
 
   return lobby.queries.map((query) => {
     return {
       nick: query.nick,
-      areas: query.type === 'farm' ? assignAreas(query.areas) : [],
+      areas: query.type === 'farm' ? assignAreas(query) : [],
     };
   });
 }
@@ -144,4 +131,11 @@ function generateGameName(includeCounter: boolean): string {
   }
 
   return randomNames.join('');
+}
+
+function shuffleArray<T>(array: T[]): T[] {
+  return array
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
 }
