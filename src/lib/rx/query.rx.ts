@@ -7,21 +7,20 @@ import {
   userInput,
   userTrigger,
 } from '@berglund/rx';
+import { AuthService, QueryService } from '@d2qs/api';
 import {
   Act,
   ACT_1,
   Area,
-  AuthService,
   BAAL,
   Difficulty,
   FARM,
   HELL,
   Query,
-  QueryService,
   Quest,
   QUEST_1,
   Type,
-} from '@d2qs/api';
+} from '@d2qs/model';
 import firebase from 'firebase/compat/app';
 import { combineLatest, EMPTY, merge, Observable, of } from 'rxjs';
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';

@@ -1,4 +1,4 @@
-import { Query } from '../query/query-model';
+import { Query } from './query-model';
 
 export interface Lobby extends Omit<Query, 'nick' | 'timestamp' | 'playerId'> {
   queries: Query[];

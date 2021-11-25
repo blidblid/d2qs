@@ -5,6 +5,7 @@ import {
   BergSelectComponent,
 } from '@berglund/material';
 import { component } from '@berglund/mixins';
+import { AuthService, QueryService } from '@d2qs/api';
 import {
   Act,
   ACT_1,
@@ -15,14 +16,12 @@ import {
   ACT_LOCALE,
   Area,
   AREA_LOCALE,
-  AuthService,
   Difficulty,
   DIFFICULTY_LOCALE,
   FARM,
   HELL,
   NIGHTMARE,
   NORMAL,
-  QueryService,
   Quest,
   QUEST,
   QUEST_1,
@@ -36,7 +35,7 @@ import {
   RUN_AREAS,
   Type,
   TYPE_LOCALE,
-} from '@d2qs/api';
+} from '@d2qs/model';
 import { Rx } from '@d2qs/rx';
 import { combineLatest, of } from 'rxjs';
 import { map, startWith, switchMap } from 'rxjs/operators';

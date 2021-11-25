@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BergButtonComponent, BergTableComponent } from '@berglund/material';
 import { component } from '@berglund/mixins';
+import { AuthService } from '@d2qs/api';
 import {
   Act,
   ACT_LOCALE,
   Area,
   AREA_LOCALE,
-  AuthService,
   Difficulty,
   DIFFICULTY_LOCALE,
   Lobby,
@@ -17,7 +17,7 @@ import {
   RUN,
   Type,
   TYPE_LOCALE,
-} from '@d2qs/api';
+} from '@d2qs/model';
 import { Rx } from '@d2qs/rx';
 import { interval, of } from 'rxjs';
 import { delay, map, startWith, switchMap } from 'rxjs/operators';

@@ -1,6 +1,6 @@
 import { Entity } from '@berglund/firebase';
-import { Area } from '../auth/user-model';
-import { Lobby } from '../lobby/lobby-model';
+import { Lobby } from './lobby-model';
+import { Area } from './user-model';
 
 export interface Game extends Entity {
   lobby: Lobby;

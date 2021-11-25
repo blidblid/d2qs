@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { mergeValidationErrors } from '@berglund/mixins';
 import { hasLength, mergeWith, userInput, userTrigger } from '@berglund/rx';
+import { AuthService, UserService } from '@d2qs/api';
 import {
   Area,
-  AuthService,
   FALLBACK_NICK,
   FALLBACK_REFRESH_MODE,
   FALLBACK_REGION,
   RefreshMode,
   Region,
-  UserService,
-} from '@d2qs/api';
+} from '@d2qs/model';
 import { combineLatest, EMPTY } from 'rxjs';
 import { debounceTime, switchMap, withLatestFrom } from 'rxjs/operators';
 

@@ -12,7 +12,7 @@ import {
   REFRESH_MODE_LOCALE,
   Region,
   REGION_LOCALE,
-} from '@d2qs/api';
+} from '@d2qs/model';
 import { Rx } from '@d2qs/rx';
 
 @Injectable({ providedIn: 'root' })

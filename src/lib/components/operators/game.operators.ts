@@ -5,7 +5,7 @@ import {
   BergTableComponent,
 } from '@berglund/material';
 import { component } from '@berglund/mixins';
-import { Area, AREA_LOCALE } from '@d2qs/api';
+import { Area, AREA_LOCALE } from '@d2qs/model';
 import { Rx } from '@d2qs/rx';
 import { map, pluck } from 'rxjs/operators';
 

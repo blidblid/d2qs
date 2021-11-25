@@ -20,9 +20,10 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "@d2qs/api": ["src/lib/api"],
-      "@d2qs/rx": ["src/lib/rx"],
       "@d2qs/core": ["src/lib/core"],
-      "@d2qs/components": ["src/lib/components"]
+      "@d2qs/components": ["src/lib/components"],
+      "@d2qs/model": ["src/lib/model"],
+      "@d2qs/rx": ["src/lib/rx"]
     }
   },
   "angularCompilerOptions": {

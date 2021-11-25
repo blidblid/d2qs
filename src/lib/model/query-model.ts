@@ -1,5 +1,5 @@
 import { Entity } from '@berglund/firebase';
-import { Area, Preferences } from '../auth/user-model';
+import { Area, Preferences } from './user-model';
 
 export interface Query extends Entity, Omit<Preferences, 'refreshMode'> {
   type: Type;

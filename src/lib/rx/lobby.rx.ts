@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { userTrigger } from '@berglund/rx';
+import { AuthService, QueryService, UserService } from '@d2qs/api';
 import {
-  AuthService,
   AUTO_REFRESH_TIME,
   FALLBACK_NICK,
   FALLBACK_REGION,
   Lobby,
   Query,
-  QueryService,
   REFRESH_THROTTLE_TIME,
   toLobbies,
-  UserService,
-} from '@d2qs/api';
+} from '@d2qs/model';
 import firebase from 'firebase/compat/app';
 import { combineLatest, EMPTY, interval, merge } from 'rxjs';
 import {

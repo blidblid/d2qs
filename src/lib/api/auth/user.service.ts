@@ -1,9 +1,9 @@
 import { Injectable, Injector } from '@angular/core';
 import { CrudApi } from '@berglund/firebase';
+import { User } from '@d2qs/model';
 import { Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
-import { User } from './user-model';
 
 @Injectable({
   providedIn: 'root',

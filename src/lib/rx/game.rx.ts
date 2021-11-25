@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { triggeredUnflatten, userTrigger } from '@berglund/rx';
+import { AuthService, GameService, UserService } from '@d2qs/api';
 import {
   ACT_LOCALE,
   AREA_LOCALE,
-  AuthService,
   DIFFICULTY_LOCALE,
   Game,
-  GameService,
   QUEST_LOCALE,
   TYPE_LOCALE,
-  UserService,
-} from '@d2qs/api';
+} from '@d2qs/model';
 import firebase from 'firebase/compat/app';
 import { from, of } from 'rxjs';
 import { filter, map, pluck, shareReplay, switchMap } from 'rxjs/operators';

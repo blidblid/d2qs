@@ -1,5 +1,5 @@
-import { Query } from '../query/query-model';
 import { Lobby } from './lobby-model';
+import { Query } from './query-model';
 
 export function toLobbies(queries: Query[]): Lobby[] {
   const lobbies: Record<string, Lobby> = {};
