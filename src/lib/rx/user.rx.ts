@@ -11,7 +11,7 @@ import {
   RefreshMode,
   Region,
   UserService,
-} from '@d2queue/api';
+} from '@d2qs/api';
 import { combineLatest, EMPTY } from 'rxjs';
 import { debounceTime, switchMap, withLatestFrom } from 'rxjs/operators';
 

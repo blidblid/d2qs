@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PageNotFoundComponent } from '@d2queue/components';
+import { PageNotFoundComponent } from '@d2qs/components';
 import { HomeComponent } from './home/home.component';
 import { QueueComponent } from './queue/queue.component';
 

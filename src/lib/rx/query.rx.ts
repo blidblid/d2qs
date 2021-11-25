@@ -21,7 +21,7 @@ import {
   Quest,
   QUEST_1,
   Type,
-} from '@d2queue/api';
+} from '@d2qs/api';
 import firebase from 'firebase/compat/app';
 import { combineLatest, EMPTY, merge, Observable, of } from 'rxjs';
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';

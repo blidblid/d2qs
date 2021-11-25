@@ -19,10 +19,10 @@
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "paths": {
-      "@d2queue/api": ["src/lib/api"],
-      "@d2queue/rx": ["src/lib/rx"],
-      "@d2queue/core": ["src/lib/core"],
-      "@d2queue/components": ["src/lib/components"]
+      "@d2qs/api": ["src/lib/api"],
+      "@d2qs/rx": ["src/lib/rx"],
+      "@d2qs/core": ["src/lib/core"],
+      "@d2qs/components": ["src/lib/components"]
     }
   },
   "angularCompilerOptions": {

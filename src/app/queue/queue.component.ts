@@ -3,9 +3,9 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import { AuthService, UserService } from '@d2queue/api';
-import { Operators } from '@d2queue/components';
-import { Rx } from '@d2queue/rx';
+import { AuthService, UserService } from '@d2qs/api';
+import { Operators } from '@d2qs/components';
+import { Rx } from '@d2qs/rx';
 import { merge, Subject } from 'rxjs';
 import { map, skip } from 'rxjs/operators';
 

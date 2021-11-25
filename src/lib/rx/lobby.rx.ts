@@ -11,7 +11,7 @@ import {
   REFRESH_THROTTLE_TIME,
   toLobbies,
   UserService,
-} from '@d2queue/api';
+} from '@d2qs/api';
 import firebase from 'firebase/compat/app';
 import { combineLatest, EMPTY, interval, merge } from 'rxjs';
 import {

@@ -10,7 +10,7 @@ import {
   QUEST_LOCALE,
   TYPE_LOCALE,
   UserService,
-} from '@d2queue/api';
+} from '@d2qs/api';
 import firebase from 'firebase/compat/app';
 import { from, of } from 'rxjs';
 import { filter, map, pluck, shareReplay, switchMap } from 'rxjs/operators';

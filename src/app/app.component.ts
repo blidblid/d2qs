@@ -8,7 +8,7 @@ import {
   HUGE_BREAKPOINT,
   MOBILE_BREAKPOINT,
   SMALL_BREAKPOINT,
-} from '@d2queue/core';
+} from '@d2qs/core';
 import { map } from 'rxjs/operators';
 
 @Component({

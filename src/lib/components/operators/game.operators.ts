@@ -5,8 +5,8 @@ import {
   BergTableComponent,
 } from '@berglund/material';
 import { component } from '@berglund/mixins';
-import { Area, AREA_LOCALE } from '@d2queue/api';
-import { Rx } from '@d2queue/rx';
+import { Area, AREA_LOCALE } from '@d2qs/api';
+import { Rx } from '@d2qs/rx';
 import { map, pluck } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })

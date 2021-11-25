@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MaterialSharedModule } from '@d2queue/core';
+import { MaterialSharedModule } from '@d2qs/core';
 import { LogoComponent } from './logo.component';
 
 @NgModule({

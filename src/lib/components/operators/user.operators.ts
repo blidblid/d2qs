@@ -12,8 +12,8 @@ import {
   REFRESH_MODE_LOCALE,
   Region,
   REGION_LOCALE,
-} from '@d2queue/api';
-import { Rx } from '@d2queue/rx';
+} from '@d2qs/api';
+import { Rx } from '@d2qs/rx';
 
 @Injectable({ providedIn: 'root' })
 export class UserOperators {
