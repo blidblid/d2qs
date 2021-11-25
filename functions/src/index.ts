@@ -60,21 +60,35 @@ async function createGame(
 
 function lobbyToPlayers(lobby: Lobby): Player[] {
   const numberOfAreas = 2;
-  const areaDensity: Partial<Record<Area, number>> = {};
+  const playerDensity: Partial<Record<Area, number>> = {};
+  const preferenceDensity: Partial<Record<Area, number>> = {};
 
   if (lobby.type === 'farm') {
     for (const query of lobby.queries) {
       for (const area of query.areas) {
-        areaDensity[area] = (areaDensity[area] ?? 0) + 1;
+        preferenceDensity[area] = (preferenceDensity[area] ?? 0) + 1;
       }
     }
   }
 
   function assignAreas(query: Query): Area[] {
-    return shuffleArray(query.areas)
-      .sort((a, b) => (areaDensity[a] ?? 0) - (areaDensity[b] ?? 0))
+    const areas = shuffleArray(query.areas)
+      .sort((a, b) => {
+        return (
+          (preferenceDensity[a] ?? 0) -
+          (preferenceDensity[b] ?? 0) +
+          (playerDensity[a] ?? 0) -
+          (playerDensity[b] ?? 0)
+        );
+      })
       .slice(0, numberOfAreas)
       .sort();
+
+    for (const area of areas) {
+      playerDensity[area] = (playerDensity[area] ?? 0) + 1;
+    }
+
+    return areas;
   }
 
   return lobby.queries.map((query) => {

@@ -107,6 +107,7 @@ export class LobbyOperators {
                   inputs: {
                     label: 'Join',
                     connect: this.rx.lobby.joinTrigger$,
+                    disabled: this.rx.user.hasErrors$,
                   },
                 });
           };
