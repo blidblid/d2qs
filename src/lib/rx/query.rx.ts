@@ -105,7 +105,9 @@ export class QueryRx {
   );
 
   queueTime$ = this.queueing$.pipe(
-    switchMap((queueing) => (queueing ? interval(1000) : of(null))),
+    switchMap((queueing) => {
+      return queueing ? interval(1000).pipe(startWith(0)) : of(null);
+    }),
     map((s) => {
       return (
         s && {
