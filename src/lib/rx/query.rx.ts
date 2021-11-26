@@ -109,12 +109,12 @@ export class QueryRx {
       return queueing ? interval(1000).pipe(startWith(0)) : of(null);
     }),
     map((s) => {
-      return (
-        s && {
-          minutes: `${Math.floor(s / 60)}`,
-          seconds: `${s % 60}`.padStart(2, '0'),
-        }
-      );
+      return s === null
+        ? s
+        : {
+            minutes: `${Math.floor(s / 60)}`,
+            seconds: `${s % 60}`.padStart(2, '0'),
+          };
     })
   );
 
