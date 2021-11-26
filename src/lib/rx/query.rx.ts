@@ -22,7 +22,7 @@ import {
   Type,
 } from '@d2qs/model';
 import firebase from 'firebase/compat/app';
-import { combineLatest, EMPTY, merge, Observable, of } from 'rxjs';
+import { combineLatest, EMPTY, interval, merge, Observable, of } from 'rxjs';
 import {
   filter,
   map,
@@ -102,6 +102,18 @@ export class QueryRx {
 
   queueing$ = this.activeQuery$.pipe(
     map((activeQuery) => activeQuery !== null)
+  );
+
+  queueTime$ = this.queueing$.pipe(
+    switchMap((queueing) => (queueing ? interval(1000) : of(null))),
+    map((s) => {
+      return (
+        s && {
+          minutes: `${Math.floor(s / 60)}`,
+          seconds: `${s % 60}`.padStart(2, '0'),
+        }
+      );
+    })
   );
 
   private post$ = triggeredUnflatten(

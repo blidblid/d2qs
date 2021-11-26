@@ -1,5 +1,6 @@
 @use '~@angular/material' as mat;
 @use './app/home/home-theme';
+@use './app/queue/queue-theme';
 @use './lib/core/sass-partials/material-overrides';
 @use './lib/components/logo/logo-theme';
 @include mat.core();
@@ -24,6 +25,7 @@ $theme: mat.define-dark-theme(
 );
 
 @include home-theme.theme($theme);
+@include queue-theme.theme($theme);
 @include logo-theme.theme($theme);
 @include material-overrides.theme($theme);
 @include mat.all-component-themes($theme);

@@ -1,0 +1,7 @@
+@mixin theme($theme) {
+  $foreground: map-get($theme, 'foreground');
+
+  .app-queue-timer {
+    color: map-get($foreground, 'hint-text');
+  }
+}

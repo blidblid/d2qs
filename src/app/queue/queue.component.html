@@ -12,16 +12,23 @@
       <berg-outlet [component]="operators.query.maxPlayers"></berg-outlet>
     </div>
 
-    <div class="app-queue-actions flex s-8">
-      <berg-outlet *ngIf="rx.query.queueing$ | async; else queueTrigger"
-                   [component]="operators.query.cancelTrigger">
-      </berg-outlet>
+    <div class="app-queue-actions flex a-end j-space-between hs-8">
+      <div class="flex hs-8">
+        <berg-outlet *ngIf="rx.query.queueing$ | async; else queueTrigger"
+                     [component]="operators.query.cancelTrigger">
+        </berg-outlet>
 
-      <ng-template #queueTrigger>
-        <berg-outlet [component]="operators.query.queueTrigger"></berg-outlet>
-      </ng-template>
+        <ng-template #queueTrigger>
+          <berg-outlet [component]="operators.query.queueTrigger"></berg-outlet>
+        </ng-template>
 
-      <berg-outlet [component]="operators.lobby.refreshTrigger"></berg-outlet>
+        <berg-outlet [component]="operators.lobby.refreshTrigger"></berg-outlet>
+      </div>
+
+      <div class="app-queue-timer"
+           *ngIf="rx.query.queueTime$ | async as queueTime">
+        Queueing {{queueTime.minutes}}:{{queueTime.seconds}}...
+      </div>
     </div>
 
     <mat-progress-bar mode="buffer"
