@@ -1230,17 +1230,17 @@
   dependencies:
     tslib "^2.1.0"
 
-"@berglund/material@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@berglund/material/-/material-0.0.2.tgz#10d9b6b931ac2e14ae6565e04dc9d655c9ba9caf"
-  integrity sha512-D6k5QTFoViIOxn++KQcyHcLEzYlEo0PEonu+1Uh21elc1Nz1GYrFEayENP41VvZOUefPKh0AkPoOhnHK2Xe2Qg==
+"@berglund/material@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@berglund/material/-/material-0.0.3.tgz#fde6ebe9af79975bc9984a652e1c4dc29be95c93"
+  integrity sha512-I5BTMaRebhJLg2c5vUMzRhv2v9+ecjElhvCY9iBATFsv9aENBVnekZrcMBSYdSuHFtel5ZCCsBErUnpqD/DZ3A==
   dependencies:
     tslib "^2.1.0"
 
-"@berglund/mixins@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@berglund/mixins/-/mixins-0.0.1.tgz#129e054449f8e8fa886442c2a9bb1b284ba2912c"
-  integrity sha512-dKWj4lUHWChgecH0HDMquOblgPkA99E0u8ghVQPYXoxIhV29HuFfmbSWcPyj2+mzNWao4Gx6TuP2JZTdI1kbpQ==
+"@berglund/mixins@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@berglund/mixins/-/mixins-0.0.2.tgz#83a0cf5fb7dfc2a4f8c85cfee6862a04482ccb05"
+  integrity sha512-E5qDr8xpI6bsHfk+ikU9WQT1L05b7+ch1daPBo+sy+671Bbw7EIGlDUu4YNdzMiLVOR8cR13YlVCfcV3lQyPOw==
   dependencies:
     tslib "^2.2.0"
 

@@ -30,3 +30,20 @@ export function toLobbies(queries: Query[]): Lobby[] {
 
   return Object.values(lobbies);
 }
+
+export function lobbyComparator(
+  a: Lobby,
+  b: Lobby,
+  toString: (lobby: Lobby) => string,
+  playerId?: string
+) {
+  if (a.queries.some((query) => query.playerId === playerId)) {
+    return -1;
+  }
+
+  if (b.queries.some((query) => query.playerId === playerId)) {
+    return 1;
+  }
+
+  return toString(a).localeCompare(toString(b));
+}

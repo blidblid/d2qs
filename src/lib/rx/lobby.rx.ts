@@ -60,9 +60,19 @@ export class LobbyRx {
     switchMap((takeCount) => this.queries$.pipe(take(takeCount)))
   );
 
-  regionLobbies$ = combineLatest([this.lobbies$, this.userRx.region$]).pipe(
-    map(([lobbies, region]) => {
-      return lobbies.filter((lobby) => lobby.region === region);
+  regionLobbies$ = combineLatest([
+    this.lobbies$,
+    this.userRx.region$,
+    this.authService.firebaseUser$,
+  ]).pipe(
+    map(([lobbies, region, user]) => {
+      return lobbies
+        .filter((lobby) => lobby.region === region)
+        .sort((lobby) => {
+          return lobby.queries.some((query) => query.playerId === user?.uid)
+            ? -1
+            : 1;
+        });
     })
   );
 
