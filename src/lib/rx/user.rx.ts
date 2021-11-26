@@ -5,9 +5,9 @@ import { hasLength, mergeWith, userInput, userTrigger } from '@berglund/rx';
 import { AuthService, UserService } from '@d2qs/api';
 import {
   Area,
-  FALLBACK_NICK,
-  FALLBACK_REFRESH_MODE,
-  FALLBACK_REGION,
+  DEFAULT_NICK,
+  DEFAULT_REFRESH_MODE,
+  DEFAULT_REGION,
   RefreshMode,
   Region,
 } from '@d2qs/model';
@@ -16,13 +16,13 @@ import { debounceTime, switchMap, withLatestFrom } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UserRx {
-  nick$ = userInput(
-    this.userService.getInitialProperty('nick', FALLBACK_NICK),
-    [Validators.required, Validators.minLength(2)]
-  );
+  nick$ = userInput(this.userService.getInitialProperty('nick', DEFAULT_NICK), [
+    Validators.required,
+    Validators.minLength(2),
+  ]);
 
   region$ = userInput<Region>(
-    this.userService.getInitialProperty('region', FALLBACK_REGION),
+    this.userService.getInitialProperty('region', DEFAULT_REGION),
     [Validators.required]
   );
 
@@ -32,7 +32,7 @@ export class UserRx {
   ]);
 
   refreshMode$ = userInput<RefreshMode>(
-    this.userService.getInitialProperty('refreshMode', FALLBACK_REFRESH_MODE)
+    this.userService.getInitialProperty('refreshMode', DEFAULT_REFRESH_MODE)
   );
 
   errors$ = mergeWith(

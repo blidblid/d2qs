@@ -13,10 +13,20 @@
     </div>
 
     <div class="app-queue-actions flex s-8">
-      <berg-outlet [component]="operators.query.queueTrigger"></berg-outlet>
-      <berg-outlet [component]="operators.query.stopTrigger"></berg-outlet>
+      <berg-outlet *ngIf="rx.query.queueing$ | async; else queueTrigger"
+                   [component]="operators.query.cancelTrigger">
+      </berg-outlet>
+
+      <ng-template #queueTrigger>
+        <berg-outlet [component]="operators.query.queueTrigger"></berg-outlet>
+      </ng-template>
+
       <berg-outlet [component]="operators.lobby.refreshTrigger"></berg-outlet>
     </div>
+
+    <mat-progress-bar mode="buffer"
+                      [style.opacity]="(rx.query.queueing$ | async) ? 1 : 0">
+    </mat-progress-bar>
 
     <berg-outlet class="f-1 o-auto"
                  [component]="operators.lobby.lobbies">

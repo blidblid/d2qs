@@ -12,13 +12,13 @@ export interface User extends Entity, Preferences {
   gameId?: string;
 }
 
-export const FALLBACK_NICK = '';
+export const DEFAULT_NICK = '';
 
 export type Region = 'eu' | 'us' | 'asia';
 export const EU = 'eu';
 export const US = 'us';
 export const ASIA = 'asia';
-export const FALLBACK_REGION = EU;
+export const DEFAULT_REGION = EU;
 export const REGION_LOCALE = {
   [EU]: 'EU',
   [US]: 'US',
@@ -97,4 +97,4 @@ export const REFRESH_MODE_LOCALE = {
   [AUTO]: 'Auto',
   [MANUAL]: 'Manual',
 };
-export const FALLBACK_REFRESH_MODE = AUTO;
+export const DEFAULT_REFRESH_MODE = AUTO;

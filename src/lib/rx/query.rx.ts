@@ -23,7 +23,14 @@ import {
 } from '@d2qs/model';
 import firebase from 'firebase/compat/app';
 import { combineLatest, EMPTY, merge, Observable, of } from 'rxjs';
-import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import {
+  filter,
+  map,
+  mergeMap,
+  share,
+  startWith,
+  switchMap,
+} from 'rxjs/operators';
 import { UserRx } from './user.rx';
 
 @Injectable({ providedIn: 'root' })
@@ -41,7 +48,7 @@ export class QueryRx {
   ]);
 
   queueTrigger$ = userTrigger();
-  stopTrigger$ = userTrigger();
+  cancelTrigger$ = userTrigger();
 
   errors$ = this.maxPlayers$.getErrors();
   hasErrors$ = this.errors$.pipe(hasLength());
@@ -87,6 +94,16 @@ export class QueryRx {
     filter((query): query is Query => query !== null)
   );
 
+  private activeQuery$ = this.authService.firebaseUser$.pipe(
+    switchMap((user) => (user ? this.queryService.get(user.uid) : of(null))),
+    share(),
+    startWith(null)
+  );
+
+  queueing$ = this.activeQuery$.pipe(
+    map((activeQuery) => activeQuery !== null)
+  );
+
   private post$ = triggeredUnflatten(
     this.queueTrigger$,
     (query, user) => {
@@ -98,7 +115,7 @@ export class QueryRx {
   );
 
   private leave$ = triggeredUnflatten(
-    this.stopTrigger$,
+    this.cancelTrigger$,
     (user) => (user ? this.queryService.delete(user.uid) : EMPTY),
     switchMap,
     this.authService.firebaseUser$

@@ -28,7 +28,7 @@ export class LobbyOperators {
     component: BergButtonComponent,
     inputs: {
       label: this.rx.user.refreshMode$.pipe(
-        startWith('manual'),
+        startWith('auto'),
         switchMap((refreshMode) => {
           if (refreshMode === 'manual') {
             return of('Refresh');
@@ -99,7 +99,7 @@ export class LobbyOperators {
                   inputs: {
                     label: 'Leave',
                     type: 'cancel',
-                    connect: this.rx.query.stopTrigger$,
+                    connect: this.rx.query.cancelTrigger$,
                   },
                 })
               : component({

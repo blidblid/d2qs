@@ -3,8 +3,8 @@ import { userTrigger } from '@berglund/rx';
 import { AuthService, QueryService, UserService } from '@d2qs/api';
 import {
   AUTO_REFRESH_TIME,
-  FALLBACK_NICK,
-  FALLBACK_REGION,
+  DEFAULT_NICK,
+  DEFAULT_REGION,
   Lobby,
   Query,
   REFRESH_THROTTLE_TIME,
@@ -53,7 +53,7 @@ export class LobbyRx {
   private lobbies$ = merge(
     this.refresh$.pipe(map(() => 1)),
     this.queryRx.queueTrigger$.pipe(map(() => 2)),
-    this.queryRx.stopTrigger$.pipe(map(() => 2)),
+    this.queryRx.cancelTrigger$.pipe(map(() => 2)),
     this.joinTrigger$.pipe(map(() => 2))
   ).pipe(
     startWith(1),
@@ -79,8 +79,8 @@ export class LobbyRx {
             runArea: lobby.runArea,
             difficulty: lobby.difficulty,
             maxPlayers: lobby.maxPlayers,
-            nick: user.nick ?? FALLBACK_NICK,
-            region: user.region ?? FALLBACK_REGION,
+            nick: user.nick ?? DEFAULT_NICK,
+            region: user.region ?? DEFAULT_REGION,
             timestamp: firebase.database.ServerValue.TIMESTAMP,
           })
         : EMPTY;

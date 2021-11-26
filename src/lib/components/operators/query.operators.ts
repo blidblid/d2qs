@@ -141,11 +141,11 @@ export class QueryOperators {
     },
   });
 
-  stopTrigger = component({
+  cancelTrigger = component({
     component: BergButtonComponent,
     inputs: {
-      label: 'Stop',
-      connect: this.rx.query.stopTrigger$,
+      label: 'Cancel',
+      connect: this.rx.query.cancelTrigger$,
       type: 'cancel',
       disabled: this.authService.firebaseUser$.pipe(
         switchMap((user) => {

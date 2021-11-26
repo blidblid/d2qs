@@ -3,7 +3,6 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import { AuthService, UserService } from '@d2qs/api';
 import { Operators } from '@d2qs/components';
 import { Rx } from '@d2qs/rx';
 import { merge, Subject } from 'rxjs';
@@ -30,12 +29,7 @@ export class QueueComponent {
     this.selectedIndexSub
   );
 
-  constructor(
-    private authService: AuthService,
-    private userService: UserService,
-    public operators: Operators,
-    public rx: Rx
-  ) {}
+  constructor(public operators: Operators, public rx: Rx) {}
 
   _onSelectedIndexChange(index: number): void {
     this.selectedIndexSub.next(index);
