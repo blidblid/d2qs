@@ -129,6 +129,11 @@ export class QueryOperators {
     inputs: {
       label: 'Queue',
       connect: this.rx.query.queueTrigger$,
+      hint: this.rx.user.hasErrors$.pipe(
+        map((hasErrors) => {
+          return hasErrors ? 'Add preferences before queueing.' : '';
+        })
+      ),
       disabled: combineLatest([
         this.authService.isSignedIn$,
         this.rx.query.hasErrors$,
