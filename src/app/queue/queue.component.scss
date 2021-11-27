@@ -17,6 +17,10 @@
     }
   }
 
+  .app-queue-timer {
+    white-space: nowrap;
+  }
+
   .mat-progress-bar {
     margin: 16px 0;
   }
@@ -59,7 +63,8 @@
     }
   }
 
-  .app-queue-actions {
+  .app-queue-actions,
+  .app-queue-timer {
     padding: 0 16px;
   }
 

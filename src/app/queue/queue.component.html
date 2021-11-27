@@ -24,16 +24,17 @@
 
         <berg-outlet [component]="operators.lobby.refreshTrigger"></berg-outlet>
       </div>
+    </div>
+
+    <div class="flex a-center"
+         [style.opacity]="(rx.query.queueing$ | async) ? 1 : 0">
+      <mat-progress-bar mode="query"></mat-progress-bar>
 
       <div class="app-queue-timer"
            *ngIf="rx.query.queueTime$ | async as queueTime">
-        Queueing {{queueTime.minutes}}:{{queueTime.seconds}}...
+        {{queueTime.minutes}}:{{queueTime.seconds}}
       </div>
     </div>
-
-    <mat-progress-bar mode="buffer"
-                      [style.opacity]="(rx.query.queueing$ | async) ? 1 : 0">
-    </mat-progress-bar>
 
     <berg-outlet class="f-1 o-auto"
                  [component]="operators.lobby.lobbies">
