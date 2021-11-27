@@ -18,9 +18,9 @@ export interface NamedEntity {
 }
 
 export type Difficulty = 'normal' | 'nightmare' | 'hell';
-export const NORMAL = 'normal';
-export const NIGHTMARE = 'nightmare';
-export const HELL = 'hell';
+export const NORMAL: Difficulty = 'normal';
+export const NIGHTMARE: Difficulty = 'nightmare';
+export const HELL: Difficulty = 'hell';
 export const DIFFICULTY_LOCALE: Record<Difficulty, string> = {
   normal: 'Normal',
   nightmare: 'Nightmare',
@@ -28,11 +28,11 @@ export const DIFFICULTY_LOCALE: Record<Difficulty, string> = {
 };
 
 export type Act = 'a1' | 'a2' | 'a3' | 'a4' | 'a5';
-export const ACT_1 = 'a1';
-export const ACT_2 = 'a2';
-export const ACT_3 = 'a3';
-export const ACT_4 = 'a4';
-export const ACT_5 = 'a5';
+export const ACT_1: Act = 'a1';
+export const ACT_2: Act = 'a2';
+export const ACT_3: Act = 'a3';
+export const ACT_4: Act = 'a4';
+export const ACT_5: Act = 'a5';
 export const ACT_LOCALE: Record<Act, string> = {
   a1: 'Act 1',
   a2: 'Act 2',
@@ -42,12 +42,12 @@ export const ACT_LOCALE: Record<Act, string> = {
 };
 
 export type Quest = 'q1' | 'q2' | 'q3' | 'q4' | 'q5' | 'q6';
-export const QUEST_1 = 'q1';
-export const QUEST_2 = 'q2';
-export const QUEST_3 = 'q3';
-export const QUEST_4 = 'q4';
-export const QUEST_5 = 'q5';
-export const QUEST_6 = 'q6';
+export const QUEST_1: Quest = 'q1';
+export const QUEST_2: Quest = 'q2';
+export const QUEST_3: Quest = 'q3';
+export const QUEST_4: Quest = 'q4';
+export const QUEST_5: Quest = 'q5';
+export const QUEST_6: Quest = 'q6';
 export const QUEST_LOCALE: Record<Quest, string> = {
   q1: 'Quest 1',
   q2: 'Quest 2',
@@ -58,9 +58,9 @@ export const QUEST_LOCALE: Record<Quest, string> = {
 };
 
 export type Type = 'farm' | 'run' | 'quest';
-export const FARM = 'farm';
-export const RUN = 'run';
-export const QUEST = 'quest';
+export const FARM: Type = 'farm';
+export const RUN: Type = 'run';
+export const QUEST: Type = 'quest';
 export const TYPE_LOCALE: Record<Type, string> = {
   farm: 'Farm',
   run: 'Run',

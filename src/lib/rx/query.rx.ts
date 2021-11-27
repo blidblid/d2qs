@@ -11,6 +11,7 @@ import { AuthService, QueryService } from '@d2qs/api';
 import {
   Act,
   ACT_1,
+  ACT_4,
   Area,
   BAAL,
   Difficulty,
@@ -19,6 +20,7 @@ import {
   Query,
   Quest,
   QUEST_1,
+  QUEST_4,
   Type,
 } from '@d2qs/model';
 import firebase from 'firebase/compat/app';
@@ -38,7 +40,13 @@ export class QueryRx {
   difficulty$ = userInput<Difficulty>(of(HELL), [Validators.required]);
   type$ = userInput<Type>(of(FARM), [Validators.required]);
   act$ = userInput<Act>(of(ACT_1));
-  quest$ = userInput<Quest>(of(QUEST_1));
+  quest$ = userInput<Quest>(
+    this.act$.pipe(
+      filter((act) => act === ACT_4),
+      map(() => QUEST_4),
+      startWith(QUEST_1)
+    )
+  );
   runArea$ = userInput<Area>(of(BAAL));
 
   maxPlayers$ = userInput<number>(of(8), [
