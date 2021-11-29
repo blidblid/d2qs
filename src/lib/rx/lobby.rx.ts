@@ -4,7 +4,6 @@ import { AuthService, QueryService, UserService } from '@d2qs/api';
 import {
   AUTO_REFRESH_TIME,
   DEFAULT_NICK,
-  DEFAULT_REGION,
   Lobby,
   Query,
   REFRESH_THROTTLE_TIME,
@@ -79,21 +78,23 @@ export class LobbyRx {
   joinedLobby$ = this.joinTrigger$.pipe(
     withLatestFrom(this.userService.user$, this.authService.firebaseUser$),
     switchMap(([lobby, user, firebaseUser]) => {
-      return user && firebaseUser
-        ? this.queryService.set(firebaseUser.uid, {
-            act: lobby.act,
-            type: lobby.type,
-            playerId: firebaseUser.uid,
-            quest: lobby.quest,
-            areas: lobby.areas,
-            runArea: lobby.runArea,
-            difficulty: lobby.difficulty,
-            maxPlayers: lobby.maxPlayers,
-            nick: user.nick ?? DEFAULT_NICK,
-            region: user.region ?? DEFAULT_REGION,
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-          })
-        : EMPTY;
+      if (!user || !firebaseUser) {
+        return EMPTY;
+      }
+
+      return this.queryService.set(firebaseUser.uid, {
+        act: lobby.act,
+        type: lobby.type,
+        playerId: firebaseUser.uid,
+        quest: lobby.quest,
+        runArea: lobby.runArea,
+        difficulty: lobby.difficulty,
+        maxPlayers: lobby.maxPlayers,
+        region: lobby.region,
+        areas: user.areas,
+        nick: user.nick ?? DEFAULT_NICK,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+      });
     })
   );
 

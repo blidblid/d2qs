@@ -16,7 +16,10 @@ export class UserService extends CrudApi<User> {
     shareReplay(1)
   );
 
-  constructor(protected injector: Injector, private auth: AuthService) {
+  constructor(
+    protected override injector: Injector,
+    private auth: AuthService
+  ) {
     super(injector, 'users', 'session');
   }
 

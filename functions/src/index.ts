@@ -65,14 +65,14 @@ function lobbyToPlayers(lobby: Lobby): Player[] {
 
   if (lobby.type === 'farm') {
     for (const query of lobby.queries) {
-      for (const area of query.areas) {
+      for (const area of query.areas ?? []) {
         preferenceDensity[area] = (preferenceDensity[area] ?? 0) + 1;
       }
     }
   }
 
   function assignAreas(query: Query): Area[] {
-    const areas = shuffleArray(query.areas)
+    const areas = shuffleArray(query.areas ?? [])
       .sort((a, b) => {
         return (
           (preferenceDensity[a] ?? 0) -
