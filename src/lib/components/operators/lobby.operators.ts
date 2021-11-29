@@ -105,6 +105,7 @@ export class LobbyOperators {
                   component: BergButtonComponent,
                   inputs: {
                     label: 'Join',
+                    hint: this.rx.user.errorHint$,
                     connect: this.rx.lobby.joinTrigger$,
                     disabled: this.rx.user.hasErrors$,
                   },

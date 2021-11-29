@@ -12,7 +12,7 @@ import {
   Region,
 } from '@d2qs/model';
 import { combineLatest, EMPTY } from 'rxjs';
-import { debounceTime, switchMap, withLatestFrom } from 'rxjs/operators';
+import { debounceTime, map, switchMap, withLatestFrom } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UserRx {
@@ -43,6 +43,12 @@ export class UserRx {
   );
 
   hasErrors$ = this.errors$.pipe(hasLength());
+
+  errorHint$ = this.hasErrors$.pipe(
+    map((hasErrors) => {
+      return hasErrors ? 'Add preferences before queueing' : '';
+    })
+  );
 
   signUp$ = userTrigger();
   signIn$ = userTrigger();
