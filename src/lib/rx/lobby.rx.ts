@@ -12,6 +12,7 @@ import {
 import firebase from 'firebase/compat/app';
 import { combineLatest, EMPTY, interval, merge } from 'rxjs';
 import {
+  debounceTime,
   filter,
   map,
   share,
@@ -59,7 +60,7 @@ export class LobbyRx {
     switchMap((takeCount) => this.queries$.pipe(take(takeCount)))
   );
 
-  regionLobbies$ = combineLatest([
+  private regionLobbies$ = combineLatest([
     this.lobbies$,
     this.userRx.region$,
     this.authService.firebaseUser$,
@@ -72,6 +73,19 @@ export class LobbyRx {
             ? -1
             : 1;
         });
+    })
+  );
+
+  filteredLobbies$ = combineLatest([
+    this.regionLobbies$,
+    this.queryRx.difficulty$,
+    this.queryRx.type$,
+  ]).pipe(
+    debounceTime(0),
+    map(([regionLobbies, difficulty, type]) => {
+      return regionLobbies.filter((lobby) => {
+        return lobby.difficulty === difficulty && lobby.type === type;
+      });
     })
   );
 

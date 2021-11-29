@@ -7,19 +7,16 @@ import {
   ACT_LOCALE,
   Area,
   AREA_LOCALE,
-  Difficulty,
   DIFFICULTY_LOCALE,
   Lobby,
   lobbyComparator,
   Quest,
-  QUEST,
   QUEST_LOCALE,
   REFRESH_THROTTLE_TIME,
-  RUN,
   TYPE_LOCALE,
 } from '@d2qs/model';
 import { Rx } from '@d2qs/rx';
-import { interval, of } from 'rxjs';
+import { combineLatest, interval, of } from 'rxjs';
 import { delay, map, startWith, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -54,18 +51,10 @@ export class LobbyOperators {
   lobbies = component({
     component: BergTableComponent,
     inputs: {
-      data: this.rx.lobby.regionLobbies$,
+      data: this.rx.lobby.filteredLobbies$,
       comparators: this.authService.firebaseUser$.pipe(
         map((user) => {
           return {
-            difficulty: (a: Lobby, b: Lobby) => {
-              return lobbyComparator(
-                a,
-                b,
-                this.lobbyToDifficultyLabel,
-                user?.uid
-              );
-            },
             type: (a: Lobby, b: Lobby) => {
               return lobbyComparator(a, b, this.lobbyToTypeLabel, user?.uid);
             },
@@ -76,18 +65,20 @@ export class LobbyOperators {
         })
       ),
       columns: [
-        { key: 'difficulty', label: 'Difficulty' },
         { key: 'type', label: 'Type' },
         { key: 'players', label: 'Players' },
       ],
-      placeholder: 'No lobbies yet.',
+      placeholder: combineLatest([
+        this.rx.query.difficulty$,
+        this.rx.query.type$,
+      ]).pipe(
+        map(([difficulty, type]) => {
+          return `No ${DIFFICULTY_LOCALE[difficulty]}/${TYPE_LOCALE[type]} lobbies found.`;
+        })
+      ),
       pluckLabel: (row: any, column: any) => {
         if (column === 'players') {
           return this.lobbyToPlayersLabel(row);
-        }
-
-        if (column === 'difficulty') {
-          return this.lobbyToDifficultyLabel(row);
         }
 
         if (column === 'type') {
@@ -130,17 +121,17 @@ export class LobbyOperators {
     return `${lobby.queries.length}/${lobby.maxPlayers}`;
   }
 
-  private lobbyToDifficultyLabel(lobby: Lobby): string {
-    return DIFFICULTY_LOCALE[lobby.difficulty as Difficulty];
-  }
-
   private lobbyToTypeLabel(lobby: Lobby): string {
-    return `${TYPE_LOCALE[lobby.type]}${
-      lobby.type === QUEST
-        ? ` - ${ACT_LOCALE[lobby.act as Act]} ${
-            QUEST_LOCALE[lobby.quest as Quest]
-          }`
-        : ''
-    }${lobby.type === RUN ? ` - ${AREA_LOCALE[lobby.runArea as Area]} ` : ''}`;
+    if (lobby.type === 'quest') {
+      return `${ACT_LOCALE[lobby.act as Act]} ${
+        QUEST_LOCALE[lobby.quest as Quest]
+      }`;
+    }
+
+    if (lobby.type === 'run') {
+      return `${AREA_LOCALE[lobby.runArea as Area]} run`;
+    }
+
+    return TYPE_LOCALE[lobby.type];
   }
 }

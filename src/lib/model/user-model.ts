@@ -41,7 +41,7 @@ export type Area =
   | 'pindleskin'
   | 'pit'
   | 'river_of_flame'
-  | 'tombs'
+  | 'tomb'
   | 'travincal'
   | 'tristram'
   | 'worldstone_keep';
@@ -59,7 +59,7 @@ export const MEPHISTO = 'mephisto';
 export const PINDLESKIN = 'pindleskin';
 export const PIT = 'pit';
 export const RIVER_OF_FLAME = 'river_of_flame';
-export const TOMBS = 'tombs';
+export const TOMBS = 'tomb';
 export const TRAVINCAL = 'travincal';
 export const TRISTRAM = 'tristram';
 export const WORLDSTONE_KEEP = 'worldstone_keep';
@@ -78,7 +78,7 @@ export const AREA_LOCALE: Record<Area, string> = {
   [PINDLESKIN]: 'Pindleskin',
   [PIT]: 'Pit',
   [RIVER_OF_FLAME]: 'River of Flame',
-  [TOMBS]: 'Tombs',
+  [TOMBS]: 'Tomb',
   [TRAVINCAL]: 'Travincal',
   [TRISTRAM]: 'Tristram',
   [WORLDSTONE_KEEP]: 'Worldstone Keep',
