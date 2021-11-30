@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Validators } from '@angular/forms';
+import { mergeValidationErrors } from '@berglund/mixins';
 import {
   hasLength,
+  mergeWith,
   triggeredUnflatten,
   userInput,
   userTrigger,
@@ -26,6 +28,7 @@ import {
 import firebase from 'firebase/compat/app';
 import { combineLatest, EMPTY, interval, merge, Observable, of } from 'rxjs';
 import {
+  debounceTime,
   filter,
   map,
   mergeMap,
@@ -55,10 +58,23 @@ export class QueryRx {
     Validators.max(8),
   ]);
 
+  maxLevel$ = userInput<number>(of(99), [
+    Validators.required,
+    Validators.min(1),
+    Validators.max(99),
+  ]);
+
   queueTrigger$ = userTrigger();
   cancelTrigger$ = userTrigger();
 
-  errors$ = this.maxPlayers$.getErrors();
+  errors$ = mergeWith(
+    mergeValidationErrors,
+    this.difficulty$.getErrors(),
+    this.type$.getErrors(),
+    this.maxPlayers$.getErrors(),
+    this.maxLevel$.getErrors()
+  ).pipe(debounceTime(0));
+
   hasErrors$ = this.errors$.pipe(hasLength());
 
   query$: Observable<Query> = combineLatest([
@@ -66,6 +82,7 @@ export class QueryRx {
       this.act$,
       this.quest$,
       this.runArea$,
+      this.maxLevel$,
       this.type$,
       this.difficulty$,
       this.maxPlayers$,
@@ -73,11 +90,11 @@ export class QueryRx {
     this.userRx.region$,
     this.userRx.areas$,
     this.userRx.nick$,
-    this.authService.firebaseUser$,
+    this.authService.firebaseUserId$,
   ]).pipe(
     map(
       ([
-        [act, quest, runArea, type, difficulty, maxPlayers],
+        [act, quest, runArea, maxLevel, type, difficulty, maxPlayers],
         region,
         areas,
         nick,
@@ -88,13 +105,14 @@ export class QueryRx {
               act,
               quest,
               runArea,
+              maxLevel,
               type,
               region,
               difficulty,
               maxPlayers,
               areas,
               nick,
-              playerId: user.uid,
+              playerId: user,
               timestamp: firebase.database.ServerValue.TIMESTAMP,
             } as Query)
           : null
@@ -102,8 +120,8 @@ export class QueryRx {
     filter((query): query is Query => query !== null)
   );
 
-  private activeQuery$ = this.authService.firebaseUser$.pipe(
-    switchMap((user) => (user ? this.queryService.get(user.uid) : of(null))),
+  private activeQuery$ = this.authService.firebaseUserId$.pipe(
+    switchMap((user) => (user ? this.queryService.get(user) : of(null))),
     share(),
     startWith(null)
   );
@@ -129,25 +147,25 @@ export class QueryRx {
   private post$ = triggeredUnflatten(
     this.queueTrigger$,
     (query, user) => {
-      return user ? this.queryService.set(user.uid, query) : EMPTY;
+      return user ? this.queryService.set(user, query) : EMPTY;
     },
     switchMap,
     this.query$,
-    this.authService.firebaseUser$
+    this.authService.firebaseUserId$
   );
 
   private leave$ = triggeredUnflatten(
     this.cancelTrigger$,
-    (user) => (user ? this.queryService.delete(user.uid) : EMPTY),
+    (user) => (user ? this.queryService.delete(user) : EMPTY),
     switchMap,
-    this.authService.firebaseUser$
+    this.authService.firebaseUserId$
   );
 
-  private onDisconnect$ = this.authService.firebaseUser$.pipe(
+  private onDisconnect$ = this.authService.firebaseUserId$.pipe(
     mergeMap((user) => {
       return user
         ? this.angularFireDatabase.database
-            .ref(`queries/${user.uid}`)
+            .ref(`queries/${user}`)
             .onDisconnect()
             .remove()
         : EMPTY;

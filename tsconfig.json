@@ -24,6 +24,7 @@
       "@d2qs/core": ["src/lib/core"],
       "@d2qs/components": ["src/lib/components"],
       "@d2qs/model": ["src/lib/model"],
+      "@d2qs/testing": ["src/lib/testing"],
       "@d2qs/rx": ["src/lib/rx"]
     }
   },

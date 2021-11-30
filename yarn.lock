@@ -1223,10 +1223,10 @@
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
-"@berglund/firebase@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@berglund/firebase/-/firebase-0.0.1.tgz#448bf15ce941ba575df48cbd7c24e961f42db24b"
-  integrity sha512-BP2Q9zl2fkVcGY/KQjzDMEAOGVur9buPca9rbr78Yxfes+AA/4qLRypp9j4U6QnzqytnRK/LkNXeAwU0KmD9bA==
+"@berglund/firebase@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@berglund/firebase/-/firebase-0.0.3.tgz#bcb2361971bb21d8800969b97f9a1953b3f942e8"
+  integrity sha512-wR/7c6p06bugaWP4jmG2S8+qC8GFsh7SU1Gg/grN8tsZqBXqNTSv1TEL9xMmuoV+oZtyBMOqLNs/c1JFAwt2qA==
   dependencies:
     tslib "^2.1.0"
 
@@ -1244,10 +1244,10 @@
   dependencies:
     tslib "^2.2.0"
 
-"@berglund/rx@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@berglund/rx/-/rx-0.0.1.tgz#a6beac160f7d59c563d3ad5ae532d9043bd572df"
-  integrity sha512-TgfibhjSpafduNHZe51B0XBROSxWX8T7NZ6Qyzh7G0/dYb575GSm7wJ5Ghcvq5CCkYYk2Z1xkCDkSkcrgwMugg==
+"@berglund/rx@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@berglund/rx/-/rx-0.0.2.tgz#0c79e29f0067c5df527bea63b53ef41ece2bbf25"
+  integrity sha512-O+yFqJIJwhMhGwLix5miuW6kyYVCV5xwOsn5NwAMsnA3Q/xY3K2m5bDOcwoxZYYZWUu9r034kjV7PnAgwu0YkA==
   dependencies:
     tslib "^2.1.0"
 
