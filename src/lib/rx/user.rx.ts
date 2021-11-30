@@ -10,36 +10,43 @@ import {
   DEFAULT_REGION,
   RefreshMode,
   Region,
+  User,
 } from '@d2qs/model';
-import { combineLatest, EMPTY } from 'rxjs';
-import { debounceTime, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { combineLatest, EMPTY, Observable, of } from 'rxjs';
+import {
+  debounceTime,
+  map,
+  switchMap,
+  take,
+  withLatestFrom,
+} from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UserRx {
-  nick$ = userInput(this.userService.getInitialProperty('nick', DEFAULT_NICK), [
+  nick$ = userInput(this.getInitialProperty('nick', DEFAULT_NICK), [
     Validators.required,
     Validators.minLength(2),
   ]);
 
   region$ = userInput<Region>(
-    this.userService.getInitialProperty('region', DEFAULT_REGION),
+    this.getInitialProperty('region', DEFAULT_REGION),
     [Validators.required]
   );
 
-  areas$ = userInput<Area[]>(this.userService.getInitialProperty('areas', []), [
+  areas$ = userInput<Area[]>(this.getInitialProperty('areas', []), [
     Validators.required,
     Validators.minLength(3),
   ]);
 
   refreshMode$ = userInput<RefreshMode>(
-    this.userService.getInitialProperty('refreshMode', DEFAULT_REFRESH_MODE)
+    this.getInitialProperty('refreshMode', DEFAULT_REFRESH_MODE)
   );
 
   errors$ = mergeWith(
     mergeValidationErrors,
     this.nick$.getErrors(),
-    this.region$.getErrors(),
-    this.areas$.getErrors()
+    this.areas$.getErrors(),
+    this.region$.getErrors()
   );
 
   hasErrors$ = this.errors$.pipe(hasLength());
@@ -55,10 +62,10 @@ export class UserRx {
   signOut$ = userTrigger();
 
   userUpdates = combineLatest([this.nick$, this.region$, this.areas$]).pipe(
-    withLatestFrom(this.authService.firebaseUser$),
+    withLatestFrom(this.authService.firebaseUserId$),
     switchMap(([[nick, region, areas], user]) => {
       return user
-        ? this.userService.update(user.uid, { nick, region, areas })
+        ? this.userService.update(user, { nick, region, areas })
         : EMPTY;
     }),
     debounceTime(1000)
@@ -69,5 +76,21 @@ export class UserRx {
     private userService: UserService
   ) {
     this.userUpdates.subscribe();
+  }
+
+  private getInitialProperty<T extends keyof User>(
+    property: T,
+    defaultValue: User[T]
+  ): Observable<User[T]> {
+    return this.authService.firebaseUserId$.pipe(
+      switchMap((userId) => {
+        return userId
+          ? this.userService.getProperty(userId, property).pipe(
+              map((property) => property ?? defaultValue),
+              take(1)
+            )
+          : of(defaultValue);
+      })
+    );
   }
 }

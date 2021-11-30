@@ -11,6 +11,7 @@ export function toLobbies(queries: Query[]): Lobby[] {
       query.quest,
       query.region,
       query.runArea,
+      query.maxLevel,
       query.difficulty,
       query.maxPlayers,
     ].join('');
@@ -32,7 +33,7 @@ export function lobbyComparator(
   a: Lobby,
   b: Lobby,
   toString: (lobby: Lobby) => string,
-  playerId?: string
+  playerId: string | null
 ) {
   if (a.queries.some((query) => query.playerId === playerId)) {
     return -1;

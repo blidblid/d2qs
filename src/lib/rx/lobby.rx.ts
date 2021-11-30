@@ -63,13 +63,13 @@ export class LobbyRx {
   private regionLobbies$ = combineLatest([
     this.lobbies$,
     this.userRx.region$,
-    this.authService.firebaseUser$,
+    this.authService.firebaseUserId$,
   ]).pipe(
     map(([lobbies, region, user]) => {
       return lobbies
         .filter((lobby) => lobby.region === region)
         .sort((lobby) => {
-          return lobby.queries.some((query) => query.playerId === user?.uid)
+          return lobby.queries.some((query) => query.playerId === user)
             ? -1
             : 1;
         });
@@ -90,18 +90,19 @@ export class LobbyRx {
   );
 
   joinedLobby$ = this.joinTrigger$.pipe(
-    withLatestFrom(this.userService.user$, this.authService.firebaseUser$),
-    switchMap(([lobby, user, firebaseUser]) => {
-      if (!user || !firebaseUser) {
+    withLatestFrom(this.userService.user$, this.authService.firebaseUserId$),
+    switchMap(([lobby, user, userId]) => {
+      if (!user || !userId) {
         return EMPTY;
       }
 
-      return this.queryService.set(firebaseUser.uid, {
+      return this.queryService.set(userId, {
         act: lobby.act,
         type: lobby.type,
-        playerId: firebaseUser.uid,
+        playerId: userId,
         quest: lobby.quest,
         runArea: lobby.runArea,
+        maxLevel: lobby.maxLevel,
         difficulty: lobby.difficulty,
         maxPlayers: lobby.maxPlayers,
         region: lobby.region,

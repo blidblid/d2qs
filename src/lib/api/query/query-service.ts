@@ -16,6 +16,10 @@ export class QueryService extends CrudApi<Query> {
   private minifyQuery(query: Query): Query {
     const minified = { ...query };
 
+    if (minified.type !== 'duel') {
+      delete minified.maxLevel;
+    }
+
     if (minified.type !== 'farm') {
       delete minified.areas;
     }

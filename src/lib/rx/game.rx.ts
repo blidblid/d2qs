@@ -9,15 +9,14 @@ import {
   QUEST_LOCALE,
   TYPE_LOCALE,
 } from '@d2qs/model';
-import firebase from 'firebase/compat/app';
 import { from, of } from 'rxjs';
 import { filter, map, pluck, shareReplay, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GameRx {
-  game$ = this.authService.firebaseUser$.pipe(
-    filter((user): user is firebase.User => user !== null),
-    switchMap((user) => this.userService.getProperty(user.uid, 'gameId')),
+  game$ = this.authService.firebaseUserId$.pipe(
+    filter((user): user is string => user !== null),
+    switchMap((user) => this.userService.getProperty(user, 'gameId')),
     switchMap((gameId) => (gameId ? this.gameService.get(gameId) : of(null))),
     shareReplay(1)
   );
@@ -49,6 +48,11 @@ export class GameRx {
   runArea$ = this.truthyGame$.pipe(
     pluck('lobby', 'runArea'),
     map((runArea) => (runArea ? AREA_LOCALE[runArea] : ''))
+  );
+
+  maxLevel$ = this.truthyGame$.pipe(
+    pluck('lobby', 'maxLevel'),
+    map((maxLevel) => maxLevel ?? 99)
   );
 
   private contentCopy$ = triggeredUnflatten(

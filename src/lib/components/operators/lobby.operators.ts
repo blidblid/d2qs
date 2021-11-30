@@ -52,14 +52,14 @@ export class LobbyOperators {
     component: BergTableComponent,
     inputs: {
       data: this.rx.lobby.filteredLobbies$,
-      comparators: this.authService.firebaseUser$.pipe(
-        map((user) => {
+      comparators: this.authService.firebaseUserId$.pipe(
+        map((userId) => {
           return {
             type: (a: Lobby, b: Lobby) => {
-              return lobbyComparator(a, b, this.lobbyToTypeLabel, user?.uid);
+              return lobbyComparator(a, b, this.lobbyToTypeLabel, userId);
             },
             players: (a: Lobby, b: Lobby) => {
-              return lobbyComparator(a, b, this.lobbyToPlayersLabel, user?.uid);
+              return lobbyComparator(a, b, this.lobbyToPlayersLabel, userId);
             },
           };
         })
@@ -87,12 +87,10 @@ export class LobbyOperators {
 
         return '';
       },
-      getProjectedComponent: this.authService.firebaseUser$.pipe(
-        map((firebaseUser) => {
+      getProjectedComponent: this.authService.firebaseUserId$.pipe(
+        map((userId) => {
           return (lobby: Lobby) => {
-            return lobby.queries.some(
-              (query) => query.playerId === firebaseUser?.uid
-            )
+            return lobby.queries.some((query) => query.playerId === userId)
               ? component({
                   component: BergButtonComponent,
                   inputs: {
@@ -123,6 +121,10 @@ export class LobbyOperators {
   }
 
   private lobbyToTypeLabel(lobby: Lobby): string {
+    if (lobby.type === 'duel') {
+      return `Level ${lobby.maxLevel} duels`;
+    }
+
     if (lobby.type === 'quest') {
       return `${ACT_LOCALE[lobby.act as Act]} ${
         QUEST_LOCALE[lobby.quest as Quest]

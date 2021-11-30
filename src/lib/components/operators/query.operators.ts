@@ -14,11 +14,12 @@ import {
   ACT_4,
   ACT_5,
   ACT_LOCALE,
+  ALL_TYPES,
   Area,
   AREA_LOCALE,
   Difficulty,
   DIFFICULTY_LOCALE,
-  FARM,
+  DUEL,
   HELL,
   NIGHTMARE,
   NORMAL,
@@ -47,7 +48,7 @@ export class QueryOperators {
     inputs: {
       label: 'Type',
       connect: this.rx.query.type$,
-      data: [FARM, RUN, QUEST],
+      data: ALL_TYPES,
       pluckLabel: (value: Type) => TYPE_LOCALE[value],
     },
   });
@@ -105,6 +106,21 @@ export class QueryOperators {
     })
   );
 
+  maxLevel$ = this.rx.query.type$.pipe(
+    map((type) => {
+      return type === DUEL
+        ? component({
+            component: BergInputComponent,
+            inputs: {
+              label: 'Max level',
+              type: 'number',
+              connect: this.rx.query.maxLevel$,
+            },
+          })
+        : null;
+    })
+  );
+
   difficulty = component({
     component: BergSelectComponent,
     inputs: {
@@ -148,9 +164,9 @@ export class QueryOperators {
       label: 'Cancel',
       connect: this.rx.query.cancelTrigger$,
       type: 'cancel',
-      disabled: this.authService.firebaseUser$.pipe(
-        switchMap((user) => {
-          return user ? this.queryService.get(user.uid) : of(null);
+      disabled: this.authService.firebaseUserId$.pipe(
+        switchMap((userId) => {
+          return userId ? this.queryService.get(userId) : of(null);
         }),
         map((query) => query === null),
         startWith(true)

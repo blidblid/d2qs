@@ -13,6 +13,7 @@ export interface Query
   act?: Act;
   quest?: Quest;
   runArea?: Area;
+  maxLevel?: number;
 }
 
 export interface NamedEntity {
@@ -60,11 +61,14 @@ export const QUEST_LOCALE: Record<Quest, string> = {
   q6: 'Quest 6',
 };
 
-export type Type = 'farm' | 'run' | 'quest';
+export type Type = 'duel' | 'farm' | 'run' | 'quest';
+export const DUEL: Type = 'duel';
 export const FARM: Type = 'farm';
 export const RUN: Type = 'run';
 export const QUEST: Type = 'quest';
+export const ALL_TYPES = [DUEL, FARM, RUN, QUEST];
 export const TYPE_LOCALE: Record<Type, string> = {
+  duel: 'Duel',
   farm: 'Farm',
   run: 'Run',
   quest: 'Quest',

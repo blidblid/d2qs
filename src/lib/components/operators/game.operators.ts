@@ -4,9 +4,10 @@ import {
   BergInputComponent,
   BergTableComponent,
 } from '@berglund/material';
-import { component } from '@berglund/mixins';
-import { Area, AREA_LOCALE } from '@d2qs/model';
+import { component, MixinComponent } from '@berglund/mixins';
+import { Area, AREA_LOCALE, Type } from '@d2qs/model';
 import { Rx } from '@d2qs/rx';
+import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -66,48 +67,51 @@ export class GameOperators {
     },
   });
 
-  act$ = this.rx.game.type$.pipe(
-    map((type) => {
-      return type === 'quest'
-        ? component({
-            component: BergInputComponent,
-            inputs: {
-              readonly: true,
-              connect: this.rx.game.act$,
-              label: 'Starting act',
-            },
-          })
-        : null;
+  act$ = this.getTypeComponent(
+    'quest',
+    component({
+      component: BergInputComponent,
+      inputs: {
+        readonly: true,
+        connect: this.rx.game.act$,
+        label: 'Starting act',
+      },
     })
   );
 
-  quest$ = this.rx.game.type$.pipe(
-    map((type) => {
-      return type === 'quest'
-        ? component({
-            component: BergInputComponent,
-            inputs: {
-              readonly: true,
-              connect: this.rx.game.quest$,
-              label: 'Starting quest',
-            },
-          })
-        : null;
+  quest$ = this.getTypeComponent(
+    'quest',
+    component({
+      component: BergInputComponent,
+      inputs: {
+        readonly: true,
+        connect: this.rx.game.quest$,
+        label: 'Starting quest',
+      },
     })
   );
 
-  runArea$ = this.rx.game.type$.pipe(
-    map((type) => {
-      return type === 'quest'
-        ? component({
-            component: BergInputComponent,
-            inputs: {
-              readonly: true,
-              connect: this.rx.game.runArea$,
-              label: 'Area',
-            },
-          })
-        : null;
+  runArea$ = this.getTypeComponent(
+    'run',
+    component({
+      component: BergInputComponent,
+      inputs: {
+        readonly: true,
+        connect: this.rx.game.runArea$,
+        label: 'Area',
+      },
+    })
+  );
+
+  maxLevel$ = this.getTypeComponent(
+    'duel',
+    component({
+      component: BergInputComponent,
+      inputs: {
+        readonly: true,
+        connect: this.rx.game.maxLevel$,
+        label: 'Max level',
+      },
     })
   );
 
@@ -145,4 +149,11 @@ export class GameOperators {
   });
 
   constructor(private rx: Rx) {}
+
+  private getTypeComponent<T>(
+    type: Type,
+    component: MixinComponent<T>
+  ): Observable<MixinComponent | null> {
+    return this.rx.game.type$.pipe(map((t) => (t === type ? component : null)));
+  }
 }
