@@ -1,14 +1,25 @@
 {
+  "projects": {
+    "default": "d2queue",
+    "dev": "d2queue-dev"
+  },
   "targets": {
     "d2queue": {
       "hosting": {
         "d2queue": [
           "d2queue"
+        ],
+        "d2queue-dev": [
+          "d2queue-dev"
+        ]
+      }
+    },
+    "d2queue-dev": {
+      "hosting": {
+        "d2queue-dev": [
+          "d2queue-dev"
         ]
       }
     }
-  },
-  "projects": {
-    "default": "d2queue"
   }
 }
