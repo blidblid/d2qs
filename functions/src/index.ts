@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { environment as devEnvironment } from '../../src/environments/environment';
 import { environment } from '../../src/environments/environment.prod';
 import {
   Area,
@@ -12,7 +13,10 @@ import {
   toLobbies,
 } from '../../src/lib/model';
 
-admin.initializeApp(environment.firebase);
+admin.initializeApp(
+  (functions.config().app.environment === 'dev' ? devEnvironment : environment)
+    .firebase
+);
 
 exports.createLobbyFromUpdate = functions.database
   .ref('queries')

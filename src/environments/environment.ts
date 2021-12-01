@@ -2,6 +2,7 @@ export const environment = {
   firebase: {
     apiKey: 'AIzaSyAkGBg44yXA4mNmIy9qxbgvdOWrMehI02Q',
     authDomain: 'd2queue-dev.firebaseapp.com',
+    databaseURL: 'https://d2queue-dev-default-rtdb.firebaseio.com',
     projectId: 'd2queue-dev',
     storageBucket: 'd2queue-dev.appspot.com',
     messagingSenderId: '102564226339',
