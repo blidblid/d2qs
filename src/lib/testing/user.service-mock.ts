@@ -10,6 +10,7 @@ export const MOCK_USER_DATABASE: Record<string, User> = {
     nick: MOCK_USER_NICK,
     id: MOCK_USER_ID,
     areas: [ANCIENT_TUNNELS, MAUSOLEUM, TRAVINCAL],
+    hintsMode: 'always',
     refreshMode: 'auto',
     region: 'eu',
   },

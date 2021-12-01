@@ -64,6 +64,8 @@ describe('user rx', () => {
         nick,
         region: MOCK_USER_DATABASE[MOCK_USER_ID].region,
         areas: MOCK_USER_DATABASE[MOCK_USER_ID].areas,
+        refreshMode: MOCK_USER_DATABASE[MOCK_USER_ID].refreshMode,
+        hintsMode: MOCK_USER_DATABASE[MOCK_USER_ID].hintsMode,
       });
     }));
   });
