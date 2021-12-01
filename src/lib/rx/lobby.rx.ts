@@ -53,7 +53,7 @@ export class LobbyRx {
   private lobbies$ = merge(
     this.refresh$.pipe(map(() => 1)),
     this.queryRx.queueTrigger$.pipe(map(() => 2)),
-    this.queryRx.cancelTrigger$.pipe(map(() => 2)),
+    this.queryRx.leaveTrigger$.pipe(map(() => 2)),
     this.joinTrigger$.pipe(map(() => 2))
   ).pipe(
     startWith(1),

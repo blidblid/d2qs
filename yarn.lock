@@ -1223,10 +1223,10 @@
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
-"@berglund/firebase@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@berglund/firebase/-/firebase-0.0.3.tgz#bcb2361971bb21d8800969b97f9a1953b3f942e8"
-  integrity sha512-wR/7c6p06bugaWP4jmG2S8+qC8GFsh7SU1Gg/grN8tsZqBXqNTSv1TEL9xMmuoV+oZtyBMOqLNs/c1JFAwt2qA==
+"@berglund/firebase@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@berglund/firebase/-/firebase-0.0.5.tgz#ce348098fce9d1d626e7d6517932ead8a855d261"
+  integrity sha512-y0Ag7AcXmz2J1suQp3E6WCWJj/nw7kax1IzesFuRbeFXXdmCjNzOCYJRCRUbG2N+1yj1KbdAmAJlNHAdM0TK/g==
   dependencies:
     tslib "^2.1.0"
 

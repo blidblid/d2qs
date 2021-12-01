@@ -162,7 +162,7 @@ export class QueryOperators {
     component: BergButtonComponent,
     inputs: {
       label: 'Cancel',
-      connect: this.rx.query.cancelTrigger$,
+      connect: this.rx.query.leaveTrigger$,
       type: 'cancel',
       disabled: this.authService.firebaseUserId$.pipe(
         switchMap((userId) => {

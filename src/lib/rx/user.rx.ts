@@ -63,12 +63,12 @@ export class UserRx {
 
   userUpdates = combineLatest([this.nick$, this.region$, this.areas$]).pipe(
     withLatestFrom(this.authService.firebaseUserId$),
+    debounceTime(0),
     switchMap(([[nick, region, areas], user]) => {
       return user
         ? this.userService.update(user, { nick, region, areas })
         : EMPTY;
-    }),
-    debounceTime(1000)
+    })
   );
 
   constructor(

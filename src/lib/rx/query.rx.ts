@@ -65,7 +65,7 @@ export class QueryRx {
   ]);
 
   queueTrigger$ = userTrigger();
-  cancelTrigger$ = userTrigger();
+  leaveTrigger$ = userTrigger();
 
   errors$ = mergeWith(
     mergeValidationErrors,
@@ -155,7 +155,7 @@ export class QueryRx {
   );
 
   private leave$ = triggeredUnflatten(
-    this.cancelTrigger$,
+    this.leaveTrigger$,
     (user) => (user ? this.queryService.delete(user) : EMPTY),
     switchMap,
     this.authService.firebaseUserId$

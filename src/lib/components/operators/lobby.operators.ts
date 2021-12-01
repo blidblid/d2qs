@@ -96,7 +96,7 @@ export class LobbyOperators {
                   inputs: {
                     label: 'Leave',
                     type: 'cancel',
-                    connect: this.rx.query.cancelTrigger$,
+                    connect: this.rx.query.leaveTrigger$,
                   },
                 })
               : component({
