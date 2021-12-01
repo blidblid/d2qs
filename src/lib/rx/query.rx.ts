@@ -155,7 +155,7 @@ export class QueryRx {
   );
 
   private leave$ = triggeredUnflatten(
-    this.leaveTrigger$,
+    merge(this.leaveTrigger$, this.query$),
     (user) => (user ? this.queryService.delete(user) : EMPTY),
     switchMap,
     this.authService.firebaseUserId$
