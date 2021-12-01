@@ -75,7 +75,7 @@ export class MaterialSharedModule {
     private domSanitizer: DomSanitizer,
     private iconRegistry: MatIconRegistry
   ) {
-    for (const iconName of ['github'])
+    for (const iconName of ['github', 'reddit'])
       this.iconRegistry.addSvgIcon(
         iconName,
         this.domSanitizer.bypassSecurityTrustResourceUrl(
