@@ -84,8 +84,7 @@ function lobbyToPlayers(lobby: Lobby): Player[] {
           (playerDensity[b] ?? 0)
         );
       })
-      .slice(0, numberOfAreas)
-      .sort();
+      .slice(0, numberOfAreas);
 
     for (const area of areas) {
       playerDensity[area] = (playerDensity[area] ?? 0) + 1;
