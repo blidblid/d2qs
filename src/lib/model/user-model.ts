@@ -14,17 +14,16 @@ export interface User extends Entity, Preferences {
 
 export const DEFAULT_NICK = '';
 
-export type Region = 'eu' | 'us' | 'asia';
+export type Region = 'eu' | 'us' | 'asia' | null;
 export const EU = 'eu';
 export const US = 'us';
 export const ASIA = 'asia';
-export const DEFAULT_REGION = EU;
 export const REGION_LOCALE = {
   [EU]: 'EU',
   [US]: 'US',
   [ASIA]: 'Asia',
 };
-export const ALL_REGIONS = Object.keys(REGION_LOCALE) as Region[];
+export const ALL_REGIONS = [EU, US, ASIA];
 
 export type Area =
   | 'ancient_tunnels'

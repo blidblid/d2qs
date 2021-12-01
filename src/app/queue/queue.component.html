@@ -45,7 +45,6 @@
   <mat-tab *ngIf="rx.game.game$ | async"
            label="Game">
     <div class="app-queue-form">
-      <berg-outlet [component]="operators.game.hostNick"></berg-outlet>
       <berg-outlet [component]="operators.game.gameName"></berg-outlet>
       <berg-outlet [component]="operators.game.password"></berg-outlet>
       <berg-outlet [component]="operators.game.type"></berg-outlet>

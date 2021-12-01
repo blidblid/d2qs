@@ -44,7 +44,6 @@ async function createGame(
       lobby,
       gameName,
       players: lobbyToPlayers(lobby),
-      hostNick: lobby.queries[lobby.queries.length - 1].nick,
     };
 
     for (const query of queries) {

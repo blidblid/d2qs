@@ -12,15 +12,6 @@ import { map, pluck } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GameOperators {
-  hostNick = component({
-    component: BergInputComponent,
-    inputs: {
-      readonly: true,
-      connect: this.rx.game.hostNick$,
-      label: 'Host',
-    },
-  });
-
   gameName = component({
     component: BergInputComponent,
     inputs: {

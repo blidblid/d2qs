@@ -7,7 +7,6 @@ import {
   Area,
   DEFAULT_NICK,
   DEFAULT_REFRESH_MODE,
-  DEFAULT_REGION,
   RefreshMode,
   Region,
   User,
@@ -28,10 +27,9 @@ export class UserRx {
     Validators.minLength(2),
   ]);
 
-  region$ = userInput<Region>(
-    this.getInitialProperty('region', DEFAULT_REGION),
-    [Validators.required]
-  );
+  region$ = userInput<Region>(this.getInitialProperty('region', null), [
+    Validators.required,
+  ]);
 
   areas$ = userInput<Area[]>(this.getInitialProperty('areas', []), [
     Validators.required,

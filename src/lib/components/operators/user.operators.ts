@@ -32,7 +32,7 @@ export class UserOperators {
       label: 'Region',
       connect: this.rx.user.region$,
       data: ALL_REGIONS,
-      pluckLabel: (value: Region) => REGION_LOCALE[value],
+      pluckLabel: (value: Region) => (value ? REGION_LOCALE[value] : ''),
     },
   });
 

@@ -25,7 +25,6 @@ export class GameRx {
 
   truthyGame$ = this.game$.pipe(filter((game): game is Game => !!game));
   name$ = this.truthyGame$.pipe(pluck('gameName'));
-  hostNick$ = this.truthyGame$.pipe(pluck('hostNick'));
 
   difficulty$ = this.truthyGame$.pipe(
     pluck('lobby', 'difficulty'),
