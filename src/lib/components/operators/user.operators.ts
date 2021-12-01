@@ -56,7 +56,7 @@ export class UserOperators {
     inputs: {
       label: 'Farm areas',
       selection: 'multiple',
-      hint: this.rx.user.getHint('In farm lobbies, these will be your areas.'),
+      hint: this.rx.user.getHint('In farm lobbies, this is your area pool.'),
       connect: this.rx.user.areas$,
       data: FARM_AREAS,
       pluckLabel: (value: Area) => AREA_LOCALE[value],
