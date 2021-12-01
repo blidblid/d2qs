@@ -3,7 +3,7 @@ import { Area, Preferences } from './user-model';
 
 export interface Query
   extends Entity,
-    Omit<Preferences, 'refreshMode' | 'areas'>,
+    Omit<Preferences, 'areas'>,
     Pick<Partial<Preferences>, 'areas'> {
   type: Type;
   difficulty: Difficulty;

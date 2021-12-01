@@ -4,9 +4,12 @@ import { mergeValidationErrors } from '@berglund/mixins';
 import { hasLength, mergeWith, userInput, userTrigger } from '@berglund/rx';
 import { AuthService, UserService } from '@d2qs/api';
 import {
+  ALWAYS,
   Area,
   DEFAULT_NICK,
   DEFAULT_REFRESH_MODE,
+  DEFAULT_SHOW_HINTS,
+  HintsMode,
   RefreshMode,
   Region,
   User,
@@ -40,6 +43,12 @@ export class UserRx {
     this.getInitialProperty('refreshMode', DEFAULT_REFRESH_MODE)
   );
 
+  hintsMode$ = userInput<HintsMode>(
+    this.getInitialProperty('hintsMode', DEFAULT_SHOW_HINTS)
+  );
+
+  preferences$ = combineLatest([this.region$, this.areas$, this.nick$]);
+
   errors$ = mergeWith(
     mergeValidationErrors,
     this.nick$.getErrors(),
@@ -59,12 +68,24 @@ export class UserRx {
   signIn$ = userTrigger();
   signOut$ = userTrigger();
 
-  userUpdates = combineLatest([this.nick$, this.region$, this.areas$]).pipe(
+  userUpdates = combineLatest([
+    this.nick$,
+    this.region$,
+    this.areas$,
+    this.refreshMode$,
+    this.hintsMode$,
+  ]).pipe(
     withLatestFrom(this.authService.firebaseUserId$),
     debounceTime(0),
-    switchMap(([[nick, region, areas], user]) => {
+    switchMap(([[nick, region, areas, refreshMode, hintsMode], user]) => {
       return user
-        ? this.userService.update(user, { nick, region, areas })
+        ? this.userService.update(user, {
+            nick,
+            region,
+            areas,
+            refreshMode,
+            hintsMode: hintsMode,
+          })
         : EMPTY;
     })
   );
@@ -74,6 +95,12 @@ export class UserRx {
     private userService: UserService
   ) {
     this.userUpdates.subscribe();
+  }
+
+  getHint(hint: string): Observable<string> {
+    return this.hintsMode$.pipe(
+      map((hintsMode) => (hintsMode === ALWAYS ? hint : ''))
+    );
   }
 
   private getInitialProperty<T extends keyof User>(

@@ -4,10 +4,14 @@ export interface Preferences {
   areas: Area[];
   region: Region;
   nick: string;
-  refreshMode: RefreshMode;
 }
 
-export interface User extends Entity, Preferences {
+export interface Config {
+  refreshMode: RefreshMode;
+  hintsMode: HintsMode;
+}
+
+export interface User extends Entity, Config, Preferences {
   id: string;
   gameId?: string;
 }
@@ -97,3 +101,12 @@ export const REFRESH_MODE_LOCALE = {
   [MANUAL]: 'Manual',
 };
 export const DEFAULT_REFRESH_MODE = AUTO;
+
+export type HintsMode = 'always' | 'never';
+export const ALWAYS = 'always';
+export const NEVER = 'never';
+export const DEFAULT_SHOW_HINTS: HintsMode = ALWAYS;
+export const HINTS_MODE_LOCALE: Record<HintsMode, string> = {
+  [ALWAYS]: 'Always show',
+  [NEVER]: 'Never show',
+};

@@ -47,6 +47,7 @@ export class QueryOperators {
     component: BergSelectComponent,
     inputs: {
       label: 'Type',
+      hint: this.rx.query.typeHint$,
       connect: this.rx.query.type$,
       data: ALL_TYPES,
       pluckLabel: (value: Type) => TYPE_LOCALE[value],

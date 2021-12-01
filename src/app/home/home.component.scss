@@ -25,10 +25,4 @@ $mobile-toolbar-padding: 8px;
       height: calc(100% - #{$icon-size + 2 * $mobile-toolbar-padding});
     }
   }
-
-  .mat-form-field:not(.mat-form-field-invalid) {
-    .mat-form-field-wrapper {
-      padding-bottom: 0;
-    }
-  }
 }

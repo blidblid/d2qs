@@ -18,6 +18,7 @@ export class GameOperators {
       readonly: true,
       connect: this.rx.game.name$,
       label: 'Game name',
+      hint: this.rx.user.getHint('Remember, d2qs does not host the game.'),
       getProjectedComponent: () => {
         return component({
           component: BergButtonComponent,
@@ -44,6 +45,7 @@ export class GameOperators {
     component: BergInputComponent,
     inputs: {
       readonly: true,
+      hint: this.rx.query.typeHint$,
       connect: this.rx.game.localizedType$,
       label: 'Type',
     },

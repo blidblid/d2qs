@@ -33,6 +33,7 @@ import {
   map,
   mergeMap,
   share,
+  skip,
   startWith,
   switchMap,
 } from 'rxjs/operators';
@@ -77,27 +78,25 @@ export class QueryRx {
 
   hasErrors$ = this.errors$.pipe(hasLength());
 
+  private queryForm$ = combineLatest([
+    this.act$,
+    this.quest$,
+    this.runArea$,
+    this.maxLevel$,
+    this.type$,
+    this.difficulty$,
+    this.maxPlayers$,
+  ]);
+
   query$: Observable<Query> = combineLatest([
-    combineLatest([
-      this.act$,
-      this.quest$,
-      this.runArea$,
-      this.maxLevel$,
-      this.type$,
-      this.difficulty$,
-      this.maxPlayers$,
-    ]),
-    this.userRx.region$,
-    this.userRx.areas$,
-    this.userRx.nick$,
+    this.queryForm$,
+    this.userRx.preferences$,
     this.authService.firebaseUserId$,
   ]).pipe(
     map(
       ([
         [act, quest, runArea, maxLevel, type, difficulty, maxPlayers],
-        region,
-        areas,
-        nick,
+        [region, areas, nick],
         user,
       ]) =>
         user
@@ -144,6 +143,24 @@ export class QueryRx {
     })
   );
 
+  typeHint$ = this.type$.pipe(
+    switchMap((type) => {
+      if (type === 'farm') {
+        return this.userRx.getHint('Spread out and farm.');
+      }
+
+      if (type === 'run') {
+        return this.userRx.getHint('Farm together.');
+      }
+
+      if (type === 'duel') {
+        return this.userRx.getHint('To battle!');
+      }
+
+      return of('');
+    })
+  );
+
   private post$ = triggeredUnflatten(
     this.queueTrigger$,
     (query, user) => {
@@ -155,7 +172,11 @@ export class QueryRx {
   );
 
   private leave$ = triggeredUnflatten(
-    merge(this.leaveTrigger$, this.query$),
+    merge(
+      this.leaveTrigger$,
+      this.queryForm$.pipe(skip(1)), // skip initial query form
+      this.userRx.preferences$.pipe(skip(2)) // skip initial preferences and initial request
+    ),
     (user) => (user ? this.queryService.delete(user) : EMPTY),
     switchMap,
     this.authService.firebaseUserId$
