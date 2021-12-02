@@ -1,7 +1,11 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
 @mixin theme($theme) {
-  $foreground: map-get($theme, 'foreground');
+  $config: mat.get-color-config($theme);
+  $foreground-palette: map.get($config, 'foreground');
 
   .app-logo {
-    color: map-get($foreground, 'hint-text');
+    color: mat.get-color-from-palette($foreground-palette, 'hint-text');
   }
 }
