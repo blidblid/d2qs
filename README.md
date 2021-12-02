@@ -1,4 +1,4 @@
-# [d2qs](https://d2qs.com/)
+# [D2QS](https://d2qs.com/)
 
 ## About
 
@@ -6,12 +6,50 @@ This is an open-source project to create a modern Diablo 2 lobby.
 
 The project uses an Angular frontend and a Firebase backend.
 
+### How it works
+
+In traditional Diablo 2 lobbies, the host that uses a game name to communicate the purpose of a game.
+
+D2QS uses a slightly different approach: a queue. By queueing with preferences, the server can match players that want to do the same thing. Looking to run Baal on Hell difficulty with 7 other players? Then queue with those preferences. And as soon as 8 like-minded players are queueing, the game will fire.
+
+One a game has fired, it's up to the players to host that game. D2QS will generate a game name and a password, but it _will not host the game_.
+
+### Lobby types
+
+Right now, there are queues for 4 lobby types:
+
+- Farm - the server distributes players depending on their farming preferences, and tries to minimize player count per area.
+- Run - traditional runs. All players clear an area together, rinse and repeat.
+- Quest - players start at a difficulty, an act and a quest.
+- Duel - duels for characters under a max level.
+
 ## Developing
 
-### Development server
+This is an Angular project. If you're looking to contribute, then look into https://angular.io/start.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Architecture
 
-### Build
+The architecture is done using `@berglund/rx` and `@berglund/mixin`. Broadly, it separates the state architecture into `rx`-files and `operator`-files:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- `rx` is for observables
+- `operator` is for stateful components, such `<input>` and `<table>`
+
+All operator components implements `@berglund/rx/Connectable`, which lets them connect to any `rx`-observable that you have wrapped with `userInput` or `userTrigger`.
+
+For example:
+
+- `query.rx.ts` contains all observables that relate to querying for a game. It wraps some observables with `userInput`, which makes them connectable
+- `query.operators.ts` contains all components that read or edit state. Operator components uses a `connect`-property to hook into `query.rx.ts`
+
+The app uses horizontal slices. There are six of them:
+
+- `@d2qs/api`
+- `@d2qs/core`
+- `@d2qs/components`
+- `@d2qs/model`
+- `@d2qs/testing`
+- `@d2qs/rx`
+
+### Backend
+
+The backend is plain Firebase. When developing, a dev-environment is used.
