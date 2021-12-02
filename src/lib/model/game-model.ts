@@ -5,6 +5,7 @@ import { Area } from './user-model';
 export interface Game extends Entity {
   lobby: Lobby;
   gameName: string;
+  timestamp: number;
   players: Player[];
 }
 

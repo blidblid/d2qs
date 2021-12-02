@@ -41,6 +41,15 @@ export class GameOperators {
     },
   });
 
+  time = component({
+    component: BergInputComponent,
+    inputs: {
+      readonly: true,
+      connect: this.rx.game.time$,
+      label: 'Start time',
+    },
+  });
+
   type = component({
     component: BergInputComponent,
     inputs: {

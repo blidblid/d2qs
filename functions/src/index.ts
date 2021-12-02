@@ -47,6 +47,7 @@ async function createGame(
     const game: Game = {
       lobby,
       gameName,
+      timestamp: admin.database.ServerValue.TIMESTAMP as number,
       players: lobbyToPlayers(lobby),
     };
 

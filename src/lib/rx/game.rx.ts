@@ -54,6 +54,11 @@ export class GameRx {
     map((maxLevel) => maxLevel ?? 99)
   );
 
+  time$ = this.truthyGame$.pipe(
+    pluck('timestamp'),
+    map((timestamp) => new Date(timestamp).toLocaleString())
+  );
+
   private contentCopy$ = triggeredUnflatten(
     this.contentCopyTrigger$,
     (content: string) => from(navigator.clipboard.writeText(content)),
