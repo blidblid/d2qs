@@ -4,12 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "build-all": "cd functions && tsc && cd .. && npm run build",
+    "build": "cd functions && tsc && cd .. && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
-    "deploy-prod": "npm run build-all && firebase use default && firebase deploy",
-    "deploy-dev": "npm run build-all && firebase use dev && firebase --config=./firebase-dev.json deploy"
+    "deploy-prod": "npm run build && firebase use default && firebase deploy",
+    "deploy-dev": "npm run build && firebase use dev && firebase --config=./firebase-dev.json deploy"
   },
   "private": true,
   "dependencies": {

@@ -62,12 +62,12 @@ export class LobbyRx {
 
   private regionLobbies$ = combineLatest([
     this.lobbies$,
-    this.userRx.region$,
+    this.userRx.region$.pipe(startWith(null)),
     this.authService.firebaseUserId$,
   ]).pipe(
     map(([lobbies, region, user]) => {
       return lobbies
-        .filter((lobby) => lobby.region === region)
+        .filter((lobby) => !region || lobby.region === region)
         .sort((lobby) => {
           return lobby.queries.some((query) => query.playerId === user)
             ? -1
