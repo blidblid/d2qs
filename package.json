@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "cd functions && tsc && cd .. && ng build",
+    "build": "ng build",
+    "build-functions": "cd functions && tsc && cd ..",
+    "build-all": "npm run build-functions && npm run build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
     "deploy-prod": "npm run build && firebase use default && firebase deploy",
