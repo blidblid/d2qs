@@ -2,16 +2,12 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { environment as devEnvironment } from '../../src/environments/environment';
 import { environment } from '../../src/environments/environment.prod';
+import { FARM, Game, Query, QUEST, toLobbies } from '../../src/lib/model';
 import {
-  Area,
-  FARM,
-  Game,
-  Lobby,
-  Player,
-  Query,
-  QUEST,
-  toLobbies,
-} from '../../src/lib/model';
+  generateGameName,
+  getUnassignedAreas,
+  lobbyToPlayers,
+} from './function-util';
 
 admin.initializeApp(
   (functions.config().app.environment === 'dev' ? devEnvironment : environment)
@@ -44,12 +40,18 @@ async function createGame(
       return index < lobby.maxPlayers;
     });
 
+    const players = lobbyToPlayers(lobby);
+
     const game: Game = {
       lobby,
       gameName,
+      players,
       timestamp: admin.database.ServerValue.TIMESTAMP as number,
-      players: lobbyToPlayers(lobby),
     };
+
+    if (lobby.type === 'farm') {
+      game.unassignedAreas = getUnassignedAreas(players);
+    }
 
     for (const query of queries) {
       const ref = await admin.database().ref('games').push(game);
@@ -60,99 +62,4 @@ async function createGame(
       }
     }
   }
-}
-
-function lobbyToPlayers(lobby: Lobby): Player[] {
-  const numberOfAreas = 2;
-  const playerDensity: Partial<Record<Area, number>> = {};
-  const preferenceDensity: Partial<Record<Area, number>> = {};
-
-  if (lobby.type === 'farm') {
-    for (const query of lobby.queries) {
-      for (const area of query.areas ?? []) {
-        preferenceDensity[area] = (preferenceDensity[area] ?? 0) + 1;
-      }
-    }
-  }
-
-  function assignAreas(query: Query): Area[] {
-    const areas = shuffleArray(query.areas ?? [])
-      .sort((a, b) => {
-        return (
-          (preferenceDensity[a] ?? 0) -
-          (preferenceDensity[b] ?? 0) +
-          (playerDensity[a] ?? 0) -
-          (playerDensity[b] ?? 0)
-        );
-      })
-      .slice(0, numberOfAreas);
-
-    for (const area of areas) {
-      playerDensity[area] = (playerDensity[area] ?? 0) + 1;
-    }
-
-    return areas;
-  }
-
-  return lobby.queries.map((query) => {
-    return {
-      nick: query.nick,
-      areas: query.type === 'farm' ? assignAreas(query) : [],
-    };
-  });
-}
-
-function generateGameName(includeCounter: boolean): string {
-  const names = [
-    'El',
-    'Eld',
-    'Tir',
-    'Nef',
-    'Eth',
-    'Ith',
-    'Tal',
-    'Ral',
-    'Ort',
-    'Thul',
-    'Amn',
-    'Sol',
-    'Shael',
-    'Dol',
-    'Hel',
-    'Io',
-    'Lum',
-    'Ko',
-    'Fal',
-    'Lem',
-    'Pul',
-    'Um',
-    'Mal',
-    'Ist',
-    'Gul',
-    'Vex',
-    'Ohm',
-    'Lo',
-    'Sur',
-    'Ber',
-    'Jah',
-    'Cham',
-    'Zod',
-  ];
-
-  const randomNames = Array.from({ length: 3 }).map(
-    () => names[Math.floor(Math.random() * names.length)]
-  );
-
-  if (includeCounter) {
-    randomNames.push('-1');
-  }
-
-  return randomNames.join('');
-}
-
-function shuffleArray<T>(array: T[]): T[] {
-  return array
-    .map((value) => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
 }

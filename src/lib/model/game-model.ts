@@ -7,9 +7,10 @@ export interface Game extends Entity {
   gameName: string;
   timestamp: number;
   players: Player[];
+  unassignedAreas?: Area[];
 }
 
 export interface Player {
   nick: string;
-  areas: Area[];
+  areas?: Area[];
 }
