@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Query } from '../../model/query-model';
 
 @Injectable({ providedIn: 'root' })
-export class QueryService extends CrudApi<Query> {
+export class QueryApi extends CrudApi<Query> {
   constructor(protected override injector: Injector) {
     super(injector, 'queries', 'session');
   }

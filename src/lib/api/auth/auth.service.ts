@@ -6,7 +6,7 @@ import { map, startWith } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthApi {
   firebaseUserId$: Observable<string | null> = this.auth.user
     .pipe(startWith(null))
     .pipe(map((user) => user && user.uid));

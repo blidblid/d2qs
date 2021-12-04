@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BergButtonComponent, BergTableComponent } from '@berglund/material';
 import { component } from '@berglund/mixins';
-import { AuthService } from '@d2qs/api';
+import { AuthApi } from '@d2qs/api';
 import {
   Act,
   ACT_LOCALE,
@@ -52,7 +52,7 @@ export class LobbyOperators {
     component: BergTableComponent,
     inputs: {
       data: this.rx.lobby.filteredLobbies$,
-      comparators: this.authService.firebaseUserId$.pipe(
+      comparators: this.authApi.firebaseUserId$.pipe(
         map((userId) => {
           return {
             type: (a: Lobby, b: Lobby) => {
@@ -87,7 +87,7 @@ export class LobbyOperators {
 
         return '';
       },
-      getProjectedComponent: this.authService.firebaseUserId$.pipe(
+      getProjectedComponent: this.authApi.firebaseUserId$.pipe(
         map((userId) => {
           return (lobby: Lobby) => {
             return lobby.queries.some((query) => query.playerId === userId)
@@ -114,7 +114,7 @@ export class LobbyOperators {
     },
   });
 
-  constructor(private rx: Rx, private authService: AuthService) {}
+  constructor(private rx: Rx, private authApi: AuthApi) {}
 
   private lobbyToPlayersLabel(lobby: Lobby): string {
     return `${lobby.queries.length}/${lobby.maxPlayers}`;

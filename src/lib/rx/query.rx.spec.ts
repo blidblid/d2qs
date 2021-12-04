@@ -2,34 +2,34 @@ import { fakeAsync, TestBed } from '@angular/core/testing';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { CrudApi } from '@berglund/firebase';
 import { expectEmission } from '@berglund/rx/testing';
-import { AuthService, GameService, QueryService, UserService } from '@d2qs/api';
+import { AuthApi, GameApi, QueryApi, UserApi } from '@d2qs/api';
 import { Game, Query, User } from '@d2qs/model';
 import {
   AngularFireDatabaseMock,
   AuthServiceMock,
-  createGameServiceMock,
-  createQueryServiceMock,
-  createUserServiceMock,
+  createGameApiMock,
+  createQueryApiMock,
+  createUserApiMock,
 } from '@d2qs/testing';
 import { QueryRx } from './query.rx';
 
 describe('query rx', () => {
   let queryRx: QueryRx;
-  let gameServiceMock: jasmine.SpyObj<CrudApi<Game>>;
-  let userServiceMock: jasmine.SpyObj<CrudApi<User>>;
-  let queryServiceMock: jasmine.SpyObj<CrudApi<Query>>;
+  let gameApiMock: jasmine.SpyObj<CrudApi<Game>>;
+  let userApiMock: jasmine.SpyObj<CrudApi<User>>;
+  let queryApiMock: jasmine.SpyObj<CrudApi<Query>>;
 
   beforeEach(() => {
-    gameServiceMock = createGameServiceMock();
-    userServiceMock = createUserServiceMock();
-    queryServiceMock = createQueryServiceMock();
+    gameApiMock = createGameApiMock();
+    userApiMock = createUserApiMock();
+    queryApiMock = createQueryApiMock();
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthService, useClass: AuthServiceMock },
-        { provide: GameService, useValue: gameServiceMock },
-        { provide: UserService, useValue: userServiceMock },
-        { provide: QueryService, useValue: queryServiceMock },
+        { provide: AuthApi, useClass: AuthServiceMock },
+        { provide: GameApi, useValue: gameApiMock },
+        { provide: UserApi, useValue: userApiMock },
+        { provide: QueryApi, useValue: queryApiMock },
         {
           provide: AngularFireDatabase,
           useClass: AngularFireDatabaseMock,
@@ -54,15 +54,15 @@ describe('query rx', () => {
 
   describe('api calls', () => {
     it('should set a query after the queue trigger activates', fakeAsync(() => {
-      expect(queryServiceMock.set).toHaveBeenCalledTimes(0);
+      expect(queryApiMock.set).toHaveBeenCalledTimes(0);
       queryRx.queueTrigger$.next();
-      expect(queryServiceMock.set).toHaveBeenCalledTimes(1);
+      expect(queryApiMock.set).toHaveBeenCalledTimes(1);
     }));
 
     it('should remove a query after the leave trigger activates', fakeAsync(() => {
-      expect(queryServiceMock.delete).toHaveBeenCalledTimes(0);
+      expect(queryApiMock.delete).toHaveBeenCalledTimes(0);
       queryRx.leaveTrigger$.next();
-      expect(queryServiceMock.delete).toHaveBeenCalledTimes(1);
+      expect(queryApiMock.delete).toHaveBeenCalledTimes(1);
     }));
   });
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { userTrigger } from '@berglund/rx';
-import { AuthService, QueryService, UserService } from '@d2qs/api';
+import { AuthApi, QueryApi, UserApi } from '@d2qs/api';
 import {
   AUTO_REFRESH_TIME,
   DEFAULT_NICK,
@@ -42,7 +42,7 @@ export class LobbyRx {
     throttleTime(REFRESH_THROTTLE_TIME)
   );
 
-  private queries$ = this.queryService.getAll().pipe(
+  private queries$ = this.queryApi.getAll().pipe(
     filter((queries): queries is Query[] => Array.isArray(queries)),
     map(toLobbies),
     // do not refCount to keep the firebase websocket open indefinitely,
@@ -63,7 +63,7 @@ export class LobbyRx {
   private regionLobbies$ = combineLatest([
     this.lobbies$,
     this.userRx.region$.pipe(startWith(null)),
-    this.authService.firebaseUserId$,
+    this.authApi.firebaseUserId$,
   ]).pipe(
     map(([lobbies, region, user]) => {
       return lobbies
@@ -90,13 +90,13 @@ export class LobbyRx {
   );
 
   joinedLobby$ = this.joinTrigger$.pipe(
-    withLatestFrom(this.userService.user$, this.authService.firebaseUserId$),
+    withLatestFrom(this.userApi.user$, this.authApi.firebaseUserId$),
     switchMap(([lobby, user, userId]) => {
       if (!user || !userId) {
         return EMPTY;
       }
 
-      return this.queryService.set(userId, {
+      return this.queryApi.set(userId, {
         act: lobby.act,
         type: lobby.type,
         playerId: userId,
@@ -114,10 +114,10 @@ export class LobbyRx {
   );
 
   constructor(
-    private authService: AuthService,
-    private queryService: QueryService,
+    private authApi: AuthApi,
+    private queryApi: QueryApi,
     private userRx: UserRx,
-    private userService: UserService,
+    private userApi: UserApi,
     private queryRx: QueryRx
   ) {
     this.joinedLobby$.subscribe();

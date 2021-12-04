@@ -16,6 +16,6 @@ export const MOCK_USER_DATABASE: Record<string, User> = {
   },
 };
 
-export function createUserServiceMock(): jasmine.SpyObj<CrudApi<User>> {
+export function createUserApiMock(): jasmine.SpyObj<CrudApi<User>> {
   return createCrudApiSpyObj<User>(MOCK_USER_DATABASE);
 }

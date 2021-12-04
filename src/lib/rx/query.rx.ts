@@ -9,7 +9,7 @@ import {
   userInput,
   userTrigger,
 } from '@berglund/rx';
-import { AuthService, QueryService } from '@d2qs/api';
+import { AuthApi, QueryApi } from '@d2qs/api';
 import {
   Act,
   ACT_1,
@@ -91,7 +91,7 @@ export class QueryRx {
   query$: Observable<Query> = combineLatest([
     this.queryForm$,
     this.userRx.preferences$,
-    this.authService.firebaseUserId$,
+    this.authApi.firebaseUserId$,
   ]).pipe(
     map(
       ([
@@ -119,8 +119,8 @@ export class QueryRx {
     filter((query): query is Query => query !== null)
   );
 
-  private activeQuery$ = this.authService.firebaseUserId$.pipe(
-    switchMap((user) => (user ? this.queryService.get(user) : of(null))),
+  private activeQuery$ = this.authApi.firebaseUserId$.pipe(
+    switchMap((user) => (user ? this.queryApi.get(user) : of(null))),
     share(),
     startWith(null)
   );
@@ -164,11 +164,11 @@ export class QueryRx {
   private post$ = triggeredUnflatten(
     this.queueTrigger$,
     (query, user) => {
-      return user ? this.queryService.set(user, query) : EMPTY;
+      return user ? this.queryApi.set(user, query) : EMPTY;
     },
     switchMap,
     this.query$,
-    this.authService.firebaseUserId$
+    this.authApi.firebaseUserId$
   );
 
   private leave$ = triggeredUnflatten(
@@ -177,12 +177,12 @@ export class QueryRx {
       this.queryForm$.pipe(skip(1)), // skip initial query form
       this.userRx.preferences$.pipe(skip(2)) // skip initial preferences and initial request
     ),
-    (user) => (user ? this.queryService.delete(user) : EMPTY),
+    (user) => (user ? this.queryApi.delete(user) : EMPTY),
     switchMap,
-    this.authService.firebaseUserId$
+    this.authApi.firebaseUserId$
   );
 
-  private onDisconnect$ = this.authService.firebaseUserId$.pipe(
+  private onDisconnect$ = this.authApi.firebaseUserId$.pipe(
     mergeMap((user) => {
       return user
         ? this.angularFireDatabase.database
@@ -195,8 +195,8 @@ export class QueryRx {
 
   constructor(
     private angularFireDatabase: AngularFireDatabase,
-    private authService: AuthService,
-    private queryService: QueryService,
+    private authApi: AuthApi,
+    private queryApi: QueryApi,
     private userRx: UserRx
   ) {
     merge(this.post$, this.leave$, this.onDisconnect$).subscribe();

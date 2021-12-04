@@ -2,14 +2,14 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { CrudApi } from '@berglund/firebase';
 import { expectEmission } from '@berglund/rx/testing';
-import { AuthService, GameService, QueryService, UserService } from '@d2qs/api';
+import { AuthApi, GameApi, QueryApi, UserApi } from '@d2qs/api';
 import { BAAL, Game, Query, User } from '@d2qs/model';
 import {
   AngularFireDatabaseMock,
   AuthServiceMock,
-  createGameServiceMock,
-  createQueryServiceMock,
-  createUserServiceMock,
+  createGameApiMock,
+  createQueryApiMock,
+  createUserApiMock,
   MOCK_USER_DATABASE,
   MOCK_USER_ID,
 } from '@d2qs/testing';
@@ -22,16 +22,16 @@ describe('user rx', () => {
   let queryServiceMock: jasmine.SpyObj<CrudApi<Query>>;
 
   beforeEach(() => {
-    gameServiceMock = createGameServiceMock();
-    userServiceMock = createUserServiceMock();
-    queryServiceMock = createQueryServiceMock();
+    gameServiceMock = createGameApiMock();
+    userServiceMock = createUserApiMock();
+    queryServiceMock = createQueryApiMock();
 
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthService, useClass: AuthServiceMock },
-        { provide: GameService, useValue: gameServiceMock },
-        { provide: UserService, useValue: userServiceMock },
-        { provide: QueryService, useValue: queryServiceMock },
+        { provide: AuthApi, useClass: AuthServiceMock },
+        { provide: GameApi, useValue: gameServiceMock },
+        { provide: UserApi, useValue: userServiceMock },
+        { provide: QueryApi, useValue: queryServiceMock },
         {
           provide: AngularFireDatabase,
           useClass: AngularFireDatabaseMock,

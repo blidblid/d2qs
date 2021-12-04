@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { triggeredUnflatten, userTrigger } from '@berglund/rx';
-import { AuthService, GameService, UserService } from '@d2qs/api';
+import { AuthApi, GameApi, UserApi } from '@d2qs/api';
 import {
   ACT_LOCALE,
   AREA_LOCALE,
@@ -14,10 +14,10 @@ import { filter, map, pluck, shareReplay, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GameRx {
-  game$ = this.authService.firebaseUserId$.pipe(
+  game$ = this.authApi.firebaseUserId$.pipe(
     filter((user): user is string => user !== null),
-    switchMap((user) => this.userService.getProperty(user, 'gameId')),
-    switchMap((gameId) => (gameId ? this.gameService.get(gameId) : of(null))),
+    switchMap((user) => this.userApi.getProperty(user, 'gameId')),
+    switchMap((gameId) => (gameId ? this.gameApi.get(gameId) : of(null))),
     shareReplay(1)
   );
 
@@ -65,7 +65,7 @@ export class GameRx {
         return null;
       }
 
-      let message = 'Write "done" once you finish.';
+      let message = 'Write "done" in the game chat once you finish.';
 
       if (
         Array.isArray(game.unassignedAreas) &&
@@ -88,9 +88,9 @@ export class GameRx {
   );
 
   constructor(
-    private authService: AuthService,
-    private gameService: GameService,
-    private userService: UserService
+    private authApi: AuthApi,
+    private gameApi: GameApi,
+    private userApi: UserApi
   ) {
     this.contentCopy$.subscribe();
   }

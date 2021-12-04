@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { mergeValidationErrors } from '@berglund/mixins';
 import { hasLength, mergeWith, userInput, userTrigger } from '@berglund/rx';
-import { AuthService, UserService } from '@d2qs/api';
+import { AuthApi, UserApi } from '@d2qs/api';
 import {
   ALWAYS,
   Area,
@@ -75,11 +75,11 @@ export class UserRx {
     this.refreshMode$,
     this.hintsMode$,
   ]).pipe(
-    withLatestFrom(this.authService.firebaseUserId$),
+    withLatestFrom(this.authApi.firebaseUserId$),
     debounceTime(0),
     switchMap(([[nick, region, areas, refreshMode, hintsMode], user]) => {
       return user
-        ? this.userService.update(user, {
+        ? this.userApi.update(user, {
             nick,
             region,
             areas,
@@ -90,10 +90,7 @@ export class UserRx {
     })
   );
 
-  constructor(
-    private authService: AuthService,
-    private userService: UserService
-  ) {
+  constructor(private authApi: AuthApi, private userApi: UserApi) {
     this.userUpdates.subscribe();
   }
 
@@ -107,10 +104,10 @@ export class UserRx {
     property: T,
     defaultValue: User[T]
   ): Observable<User[T]> {
-    return this.authService.firebaseUserId$.pipe(
+    return this.authApi.firebaseUserId$.pipe(
       switchMap((userId) => {
         return userId
-          ? this.userService.getProperty(userId, property).pipe(
+          ? this.userApi.getProperty(userId, property).pipe(
               map((property) => property ?? defaultValue),
               take(1)
             )
