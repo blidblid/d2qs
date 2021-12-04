@@ -59,6 +59,27 @@ export class GameRx {
     map((timestamp) => new Date(timestamp).toLocaleString())
   );
 
+  hint$ = this.truthyGame$.pipe(
+    map((game) => {
+      if (game.lobby.type !== 'farm') {
+        return null;
+      }
+
+      let message = 'Write "done" once you finish.';
+
+      if (
+        Array.isArray(game.unassignedAreas) &&
+        game.unassignedAreas.length > 0
+      ) {
+        message += ` While you wait, these areas are available: ${game.unassignedAreas
+          .map((area) => AREA_LOCALE[area])
+          .join(', ')}.`;
+      }
+
+      return message;
+    })
+  );
+
   private contentCopy$ = triggeredUnflatten(
     this.contentCopyTrigger$,
     (content: string) => from(navigator.clipboard.writeText(content)),

@@ -1230,10 +1230,10 @@
   dependencies:
     tslib "^2.1.0"
 
-"@berglund/material@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@berglund/material/-/material-0.0.4.tgz#4cf56adbcbe6bda0ea30e13528b702cb259a5ee7"
-  integrity sha512-FSYNliTuDDhCP5HzpIDAzzIxbGjSrBU4G/m/nlc4p7VYIzjAYmkGJqE/xOBCAFq2bAq5Dqjb6Q3rQsimypdSUg==
+"@berglund/material@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@berglund/material/-/material-0.0.5.tgz#f01729c3db303abfce9cc62c0431e9c364742c9f"
+  integrity sha512-KUYBew2xRIQYZH7gChQAFYl82wSC2FZ6/pw1JcxXhWtACQI34xnPId6P0h26knyDesTuNI9VIIhcHZWwubf4nA==
   dependencies:
     tslib "^2.1.0"
 

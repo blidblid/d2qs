@@ -56,9 +56,14 @@
       <berg-outlet [component]="operators.game.maxLevel$ | async"></berg-outlet>
     </div>
 
-    <berg-outlet class="f-1  o-auto"
+    <berg-outlet class="f-1 o-auto"
                  [component]="operators.game.players">
     </berg-outlet>
+
+    <mat-hint class="app-queue-unassigned-hint"
+              *ngIf="rx.game.hint$ | async as hint">
+      {{hint}}
+    </mat-hint>
   </mat-tab>
 
   <mat-tab>

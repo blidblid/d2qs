@@ -26,7 +26,7 @@
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
     "@berglund/firebase": "^0.0.5",
-    "@berglund/material": "^0.0.4",
+    "@berglund/material": "^0.0.5",
     "@berglund/mixins": "^0.0.2",
     "@berglund/rx": "^0.0.2",
     "firebase": "9.2.0",
