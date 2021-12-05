@@ -2,12 +2,13 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { CrudApi } from '@berglund/firebase';
 import { expectEmission } from '@berglund/rx/testing';
-import { AuthApi, GameApi, QueryApi, UserApi } from '@d2qs/api';
+import { AuthApi, GameApi, QueryApiFactory, UserApi } from '@d2qs/api';
 import { BAAL, Game, Query, User } from '@d2qs/model';
 import {
   AngularFireDatabaseMock,
   AuthServiceMock,
   createGameApiMock,
+  createQueryApiFactoryMock,
   createQueryApiMock,
   createUserApiMock,
   MOCK_USER_DATABASE,
@@ -17,21 +18,23 @@ import { UserRx } from './user.rx';
 
 describe('user rx', () => {
   let userRx: UserRx;
-  let gameServiceMock: jasmine.SpyObj<CrudApi<Game>>;
-  let userServiceMock: jasmine.SpyObj<CrudApi<User>>;
-  let queryServiceMock: jasmine.SpyObj<CrudApi<Query>>;
+  let gameApiMock: jasmine.SpyObj<CrudApi<Game>>;
+  let userApiMock: jasmine.SpyObj<CrudApi<User>>;
+  let queryApiMock: jasmine.SpyObj<CrudApi<Query>>;
+  let queryApiFactoryMock: jasmine.SpyObj<QueryApiFactory>;
 
   beforeEach(() => {
-    gameServiceMock = createGameApiMock();
-    userServiceMock = createUserApiMock();
-    queryServiceMock = createQueryApiMock();
+    gameApiMock = createGameApiMock();
+    userApiMock = createUserApiMock();
+    queryApiMock = createQueryApiMock();
+    queryApiFactoryMock = createQueryApiFactoryMock(queryApiMock);
 
     TestBed.configureTestingModule({
       providers: [
         { provide: AuthApi, useClass: AuthServiceMock },
-        { provide: GameApi, useValue: gameServiceMock },
-        { provide: UserApi, useValue: userServiceMock },
-        { provide: QueryApi, useValue: queryServiceMock },
+        { provide: GameApi, useValue: gameApiMock },
+        { provide: UserApi, useValue: userApiMock },
+        { provide: QueryApiFactory, useValue: queryApiFactoryMock },
         {
           provide: AngularFireDatabase,
           useClass: AngularFireDatabaseMock,
@@ -60,12 +63,16 @@ describe('user rx', () => {
       userRx.nick$.next(nick);
       tick(0);
 
-      expect(userServiceMock.update).toHaveBeenCalledWith(MOCK_USER_ID, {
+      expect(userApiMock.update).toHaveBeenCalledWith(MOCK_USER_ID, {
         nick,
         region: MOCK_USER_DATABASE[MOCK_USER_ID].region,
         areas: MOCK_USER_DATABASE[MOCK_USER_ID].areas,
         refreshMode: MOCK_USER_DATABASE[MOCK_USER_ID].refreshMode,
         hintsMode: MOCK_USER_DATABASE[MOCK_USER_ID].hintsMode,
+        platform: MOCK_USER_DATABASE[MOCK_USER_ID].platform,
+        switchFriendCode: MOCK_USER_DATABASE[MOCK_USER_ID].switchFriendCode,
+        playStationId: MOCK_USER_DATABASE[MOCK_USER_ID].playStationId,
+        xboxGamertag: MOCK_USER_DATABASE[MOCK_USER_ID].xboxGamertag,
       });
     }));
   });

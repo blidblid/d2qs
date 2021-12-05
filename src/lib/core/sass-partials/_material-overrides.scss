@@ -19,6 +19,16 @@
     user-select: text;
   }
 
+  // todo - remove after @berglund/material bump
+  .mat-cell:not(:first-of-type):not(:last-of-type) {
+    padding: 0 8px !important;
+  }
+
+  // todo - remove after @berglund/material bump
+  .mat-sort-header-content {
+    white-space: nowrap;
+  }
+
   .mat-tab-group {
     box-shadow: none;
     background: mat.get-color-from-palette($background-palette, 'card');

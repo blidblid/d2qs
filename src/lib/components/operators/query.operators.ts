@@ -5,7 +5,7 @@ import {
   BergSelectComponent,
 } from '@berglund/material';
 import { component } from '@berglund/mixins';
-import { AuthApi, QueryApi } from '@d2qs/api';
+import { AuthApi } from '@d2qs/api';
 import {
   Act,
   ACT_1,
@@ -165,9 +165,12 @@ export class QueryOperators {
       label: 'Cancel',
       connect: this.rx.query.leaveTrigger$,
       type: 'cancel',
-      disabled: this.authApi.firebaseUserId$.pipe(
-        switchMap((userId) => {
-          return userId ? this.queryApi.get(userId) : of(null);
+      disabled: combineLatest([
+        this.authApi.firebaseUserId$,
+        this.rx.user.queryApi$,
+      ]).pipe(
+        switchMap(([userId, queryApi]) => {
+          return userId ? queryApi.get(userId) : of(null);
         }),
         map((query) => query === null),
         startWith(true)
@@ -175,9 +178,5 @@ export class QueryOperators {
     },
   });
 
-  constructor(
-    private rx: Rx,
-    private authApi: AuthApi,
-    private queryApi: QueryApi
-  ) {}
+  constructor(private rx: Rx, private authApi: AuthApi) {}
 }

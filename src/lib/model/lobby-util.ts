@@ -14,6 +14,7 @@ export function toLobbies(queries: Query[]): Lobby[] {
       query.maxLevel,
       query.difficulty,
       query.maxPlayers,
+      query.platform,
     ].join('');
 
     if (lobbies[identifier]) {

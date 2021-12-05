@@ -6,17 +6,26 @@ import {
   AREA_LOCALE,
   DIFFICULTY_LOCALE,
   Game,
+  PLATFORM_LOCALE,
   QUEST_LOCALE,
   TYPE_LOCALE,
 } from '@d2qs/model';
 import { from, of } from 'rxjs';
-import { filter, map, pluck, shareReplay, switchMap } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  pluck,
+  shareReplay,
+  switchMap,
+} from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GameRx {
   game$ = this.authApi.firebaseUserId$.pipe(
     filter((user): user is string => user !== null),
     switchMap((user) => this.userApi.getProperty(user, 'gameId')),
+    distinctUntilChanged(),
     switchMap((gameId) => (gameId ? this.gameApi.get(gameId) : of(null))),
     shareReplay(1)
   );
@@ -54,6 +63,12 @@ export class GameRx {
     map((maxLevel) => maxLevel ?? 99)
   );
 
+  private platformId$ = this.truthyGame$.pipe(pluck('lobby', 'platform'));
+
+  platform$ = this.platformId$.pipe(
+    map((platform) => PLATFORM_LOCALE[platform])
+  );
+
   time$ = this.truthyGame$.pipe(
     pluck('timestamp'),
     map((timestamp) => new Date(timestamp).toLocaleString())
@@ -61,23 +76,22 @@ export class GameRx {
 
   hint$ = this.truthyGame$.pipe(
     map((game) => {
-      if (game.lobby.type !== 'farm') {
+      if (
+        game.lobby.type !== 'farm' ||
+        !Array.isArray(game.unassignedAreas) ||
+        game.unassignedAreas.length === 0
+      ) {
         return null;
       }
 
-      let message = 'Write "done" in the game chat once you finish.';
-
-      if (
-        Array.isArray(game.unassignedAreas) &&
-        game.unassignedAreas.length > 0
-      ) {
-        message += ` While you wait, these areas are available: ${game.unassignedAreas
-          .map((area) => AREA_LOCALE[area])
-          .join(', ')}.`;
-      }
-
-      return message;
+      return `Unassigned areas: ${game.unassignedAreas
+        .map((area) => AREA_LOCALE[area])
+        .join(', ')}.`;
     })
+  );
+
+  showGameName$ = this.platformId$.pipe(
+    map((platformId) => platformId === 'pc')
   );
 
   private contentCopy$ = triggeredUnflatten(

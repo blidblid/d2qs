@@ -2,7 +2,15 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { environment as devEnvironment } from '../../src/environments/environment';
 import { environment } from '../../src/environments/environment.prod';
-import { FARM, Game, Query, QUEST, toLobbies } from '../../src/lib/model';
+import {
+  ALL_PLATFORMS,
+  ALL_REGIONS,
+  FARM,
+  Game,
+  Query,
+  QUEST,
+  toLobbies,
+} from '../../src/lib/model';
 import {
   generateGameName,
   getUnassignedAreas,
@@ -14,16 +22,39 @@ admin.initializeApp(
     .firebase
 );
 
-exports.createLobbyFromUpdate = functions.database
-  .ref('queries')
-  .onUpdate(async (data) => await createGame(data.after.val()));
+// dynamically export functions for all regions and platforms
+for (const region of ALL_REGIONS) {
+  for (const platform of ALL_PLATFORMS) {
+    const path = [region, platform].join('/');
+    const name = [region, platform].map(capitalize).join('');
 
-exports.createLobbyFromCreate = functions.database
-  .ref('queries')
-  .onCreate(async (data) => await createGame(data.val()));
+    exports[`create${name}LobbyFromCreate`] = functions.database
+      .ref(path)
+      .onCreate((data) => gameFromCreate(data, path));
+
+    exports[`create${name}LobbyFromUpdate`] = functions.database
+      .ref(path)
+      .onUpdate((data) => gameFromUpdate(data, path));
+  }
+}
+
+async function gameFromUpdate(
+  data: functions.Change<functions.database.DataSnapshot>,
+  path: string
+): Promise<void> {
+  return await createGame(data.after.val(), path);
+}
+
+async function gameFromCreate(
+  data: functions.database.DataSnapshot,
+  path: string
+): Promise<void> {
+  return await createGame(data.val(), path);
+}
 
 async function createGame(
-  value: functions.database.DataSnapshot
+  value: functions.database.DataSnapshot,
+  path: string
 ): Promise<void> {
   const queries: Query[] = Object.values(value ?? {});
 
@@ -57,9 +88,17 @@ async function createGame(
       const ref = await admin.database().ref('games').push(game);
 
       if (ref.key) {
-        admin.database().ref(`users/${query.playerId}/gameId`).set(ref.key);
-        admin.database().ref(`queries/${query.playerId}`).remove();
+        admin
+          .database()
+          .ref(['users', query.playerId, 'gameId'].join('/'))
+          .set(ref.key);
+
+        admin.database().ref([path, query.playerId].join('/')).remove();
       }
     }
   }
+}
+
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

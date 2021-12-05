@@ -1,6 +1,15 @@
 import { Query } from './query-model';
 
-export interface Lobby extends Omit<Query, 'nick' | 'timestamp' | 'playerId'> {
+export interface Lobby
+  extends Omit<
+    Query,
+    | 'nick'
+    | 'timestamp'
+    | 'playerId'
+    | 'switchFriendCode'
+    | 'playStationId'
+    | 'xboxGamertag'
+  > {
   queries: Query[];
 }
 

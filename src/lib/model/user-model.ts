@@ -3,7 +3,11 @@ import { Entity } from '@berglund/firebase';
 export interface Preferences {
   areas: Area[];
   region: Region;
+  platform: Platform;
   nick: string;
+  switchFriendCode: string;
+  playStationId: string;
+  xboxGamertag: string;
 }
 
 export interface Config {
@@ -18,7 +22,7 @@ export interface User extends Entity, Config, Preferences {
 
 export const DEFAULT_NICK = '';
 
-export type Region = 'eu' | 'us' | 'asia' | null;
+export type Region = 'eu' | 'us' | 'asia';
 export const EU = 'eu';
 export const US = 'us';
 export const ASIA = 'asia';
@@ -27,7 +31,27 @@ export const REGION_LOCALE = {
   [US]: 'US',
   [ASIA]: 'Asia',
 };
+export const DEFAULT_REGION = EU;
 export const ALL_REGIONS = [EU, US, ASIA];
+
+export type Platform = 'pc' | 'switch' | 'ps' | 'xbox';
+export const PC = 'pc';
+export const SWITCH = 'switch';
+export const PS = 'ps';
+export const XBOX = 'xbox';
+export const PLATFORM_LOCALE = {
+  [PC]: 'PC',
+  [SWITCH]: 'Switch',
+  [PS]: 'PlayStation',
+  [XBOX]: 'Xbox',
+};
+export const PLATFORM_ID_LOCALE = {
+  [SWITCH]: 'Switch friend code',
+  [PS]: 'PlayStation id',
+  [XBOX]: 'Xbox gamertag',
+};
+export const DEFAULT_PLATFORM = PC;
+export const ALL_PLATFORMS = [PC, SWITCH, PS, XBOX];
 
 export type Area =
   | 'ancient_tunnels'

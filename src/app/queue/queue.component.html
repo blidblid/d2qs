@@ -45,8 +45,11 @@
   <mat-tab *ngIf="rx.game.game$ | async"
            label="Game">
     <div class="app-queue-form">
-      <berg-outlet [component]="operators.game.gameName"></berg-outlet>
-      <berg-outlet [component]="operators.game.password"></berg-outlet>
+      <ng-container *ngIf="rx.game.showGameName$ | async">
+        <berg-outlet [component]="operators.game.gameName"></berg-outlet>
+        <berg-outlet [component]="operators.game.password"></berg-outlet>
+      </ng-container>
+
       <berg-outlet [component]="operators.game.time"></berg-outlet>
       <berg-outlet [component]="operators.game.type"></berg-outlet>
       <berg-outlet [component]="operators.game.difficulty"></berg-outlet>
@@ -74,6 +77,8 @@
     <div class="app-queue-form">
       <berg-outlet [component]="operators.user.nick"></berg-outlet>
       <berg-outlet [component]="operators.user.region"></berg-outlet>
+      <berg-outlet [component]="operators.user.platform"></berg-outlet>
+      <berg-outlet [component]="operators.user.platformId$ | async"></berg-outlet>
       <berg-outlet [component]="operators.user.refreshMode"></berg-outlet>
       <berg-outlet [component]="operators.user.areas"></berg-outlet>
       <berg-outlet [component]="operators.user.hintsMode"></berg-outlet>

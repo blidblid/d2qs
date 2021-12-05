@@ -12,7 +12,11 @@ export const MOCK_USER_DATABASE: Record<string, User> = {
     areas: [ANCIENT_TUNNELS, MAUSOLEUM, TRAVINCAL],
     hintsMode: 'always',
     refreshMode: 'auto',
+    platform: 'pc',
     region: 'eu',
+    switchFriendCode: '',
+    playStationId: '',
+    xboxGamertag: '',
   },
 };
 

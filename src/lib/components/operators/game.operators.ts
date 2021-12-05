@@ -132,20 +132,27 @@ export class GameOperators {
             columns.push({ key: 'areas', label: 'Areas' });
           }
 
+          if (game.lobby.platform === 'switch') {
+            columns.push({
+              key: 'switchFriendCode',
+              label: 'Switch friend code',
+            });
+          } else if (game.lobby.platform === 'ps') {
+            columns.push({ key: 'playStationId', label: 'PlayStation ID' });
+          } else if (game.lobby.platform === 'xbox') {
+            columns.push({ key: 'xboxGamertag', label: 'Xbox gamertag' });
+          }
+
           return columns;
         })
       ),
       placeholder: 'No players loaded.',
       pluckLabel: (row: any, column: any) => {
-        if (column === 'nick') {
-          return row.nick;
-        }
-
         if (column === 'areas') {
           return row.areas.map((area: Area) => AREA_LOCALE[area]).join(', ');
         }
 
-        return '';
+        return row[column];
       },
     },
   });

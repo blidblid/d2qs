@@ -2,7 +2,7 @@ import { Area, FARM_AREAS, Lobby, Player, Query } from '../../src/lib/model';
 
 export function lobbyToPlayers(lobby: Lobby): Player[] {
   if (lobby.type !== 'farm') {
-    return lobby.queries.map((query) => ({ nick: query.nick }));
+    return lobby.queries.map(queryToPlayer);
   }
 
   const players: Player[] = [];
@@ -35,7 +35,7 @@ export function lobbyToPlayers(lobby: Lobby): Player[] {
         playerDensity[area] = (playerDensity[area] ?? 0) + 1;
         areas.push(area);
       } else {
-        players.push({ nick: query.nick, areas });
+        players.push({ ...queryToPlayer(query), areas });
         areasByQuery.delete(query);
       }
     }
@@ -56,6 +56,15 @@ export function lobbyToPlayers(lobby: Lobby): Player[] {
       .sort((a, b) => {
         return (playerDensity[a] ?? 0) - (playerDensity[b] ?? 0);
       })[0];
+  }
+
+  function queryToPlayer(query: Query): Player {
+    return {
+      nick: query.nick,
+      switchFriendCode: query.switchFriendCode,
+      playStationId: query.playStationId,
+      xboxGamertag: query.xboxGamertag,
+    };
   }
 }
 

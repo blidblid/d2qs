@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BergInputComponent, BergSelectComponent } from '@berglund/material';
 import { component } from '@berglund/mixins';
 import {
+  ALL_PLATFORMS,
   ALL_REGIONS,
   ALWAYS,
   Area,
@@ -12,12 +13,16 @@ import {
   HINTS_MODE_LOCALE,
   MANUAL,
   NEVER,
+  Platform,
+  PLATFORM_ID_LOCALE,
+  PLATFORM_LOCALE,
   RefreshMode,
   REFRESH_MODE_LOCALE,
   Region,
   REGION_LOCALE,
 } from '@d2qs/model';
 import { Rx } from '@d2qs/rx';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UserOperators {
@@ -37,9 +42,40 @@ export class UserOperators {
       label: 'Region',
       connect: this.rx.user.region$,
       data: ALL_REGIONS,
-      pluckLabel: (value: Region) => (value ? REGION_LOCALE[value] : ''),
+      pluckLabel: (value: Region) => REGION_LOCALE[value],
     },
   });
+
+  platform = component({
+    component: BergSelectComponent,
+    inputs: {
+      label: 'Platform',
+      connect: this.rx.user.platform$,
+      data: ALL_PLATFORMS,
+      pluckLabel: (value: Platform) => PLATFORM_LOCALE[value],
+    },
+  });
+
+  platformId$ = this.rx.user.platform$.pipe(
+    map((platform) => {
+      if (platform === 'pc') {
+        return null;
+      }
+
+      return component({
+        component: BergInputComponent,
+        inputs: {
+          label: PLATFORM_ID_LOCALE[platform],
+          connect:
+            platform === 'switch'
+              ? this.rx.user.switchFriendCode$
+              : platform === 'ps'
+              ? this.rx.user.playStationId$
+              : this.rx.user.xboxGamertag$,
+        },
+      });
+    })
+  );
 
   refreshMode = component({
     component: BergSelectComponent,

@@ -1,6 +1,6 @@
 import { Entity } from '@berglund/firebase';
 import { Lobby } from './lobby-model';
-import { Area } from './user-model';
+import { Area, Preferences } from './user-model';
 
 export interface Game extends Entity {
   lobby: Lobby;
@@ -10,7 +10,10 @@ export interface Game extends Entity {
   unassignedAreas?: Area[];
 }
 
-export interface Player {
-  nick: string;
+export interface Player
+  extends Pick<
+    Preferences,
+    'nick' | 'switchFriendCode' | 'playStationId' | 'xboxGamertag'
+  > {
   areas?: Area[];
 }

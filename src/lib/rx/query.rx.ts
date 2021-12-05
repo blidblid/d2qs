@@ -9,7 +9,7 @@ import {
   userInput,
   userTrigger,
 } from '@berglund/rx';
-import { AuthApi, QueryApi } from '@d2qs/api';
+import { AuthApi } from '@d2qs/api';
 import {
   Act,
   ACT_1,
@@ -96,7 +96,12 @@ export class QueryRx {
     map(
       ([
         [act, quest, runArea, maxLevel, type, difficulty, maxPlayers],
-        [region, areas, nick],
+        [
+          region,
+          areas,
+          nick,
+          [platform, switchFriendCode, playStationId, xboxGamertag],
+        ],
         user,
       ]) =>
         user
@@ -111,6 +116,10 @@ export class QueryRx {
               maxPlayers,
               areas,
               nick,
+              platform,
+              switchFriendCode,
+              playStationId,
+              xboxGamertag,
               playerId: user,
               timestamp: firebase.database.ServerValue.TIMESTAMP,
             } as Query)
@@ -119,8 +128,11 @@ export class QueryRx {
     filter((query): query is Query => query !== null)
   );
 
-  private activeQuery$ = this.authApi.firebaseUserId$.pipe(
-    switchMap((user) => (user ? this.queryApi.get(user) : of(null))),
+  private activeQuery$ = combineLatest([
+    this.authApi.firebaseUserId$,
+    this.userRx.queryApi$,
+  ]).pipe(
+    switchMap(([user, queryApi]) => (user ? queryApi.get(user) : of(null))),
     share(),
     startWith(null)
   );
@@ -163,12 +175,13 @@ export class QueryRx {
 
   private post$ = triggeredUnflatten(
     this.queueTrigger$,
-    (query, user) => {
-      return user ? this.queryApi.set(user, query) : EMPTY;
+    (query, user, queryApi) => {
+      return user ? queryApi.set(user, query) : EMPTY;
     },
     switchMap,
     this.query$,
-    this.authApi.firebaseUserId$
+    this.authApi.firebaseUserId$,
+    this.userRx.queryApi$
   );
 
   private leave$ = triggeredUnflatten(
@@ -177,16 +190,21 @@ export class QueryRx {
       this.queryForm$.pipe(skip(1)), // skip initial query form
       this.userRx.preferences$.pipe(skip(2)) // skip initial preferences and initial request
     ),
-    (user) => (user ? this.queryApi.delete(user) : EMPTY),
+    (user, queryApi) => (user ? queryApi.delete(user) : EMPTY),
     switchMap,
-    this.authApi.firebaseUserId$
+    this.authApi.firebaseUserId$,
+    this.userRx.queryApi$
   );
 
-  private onDisconnect$ = this.authApi.firebaseUserId$.pipe(
-    mergeMap((user) => {
-      return user
+  private onDisconnect$ = combineLatest([
+    this.authApi.firebaseUserId$,
+    this.userRx.region$,
+    this.userRx.platform$,
+  ]).pipe(
+    mergeMap(([user, region, platform]) => {
+      return user && region && platform
         ? this.angularFireDatabase.database
-            .ref(`queries/${user}`)
+            .ref([region, platform, user].join('/'))
             .onDisconnect()
             .remove()
         : EMPTY;
@@ -196,7 +214,6 @@ export class QueryRx {
   constructor(
     private angularFireDatabase: AngularFireDatabase,
     private authApi: AuthApi,
-    private queryApi: QueryApi,
     private userRx: UserRx
   ) {
     merge(this.post$, this.leave$, this.onDisconnect$).subscribe();

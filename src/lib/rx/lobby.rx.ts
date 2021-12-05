@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { userTrigger } from '@berglund/rx';
-import { AuthApi, QueryApi, UserApi } from '@d2qs/api';
+import { AuthApi, UserApi } from '@d2qs/api';
 import {
   AUTO_REFRESH_TIME,
   DEFAULT_NICK,
@@ -42,11 +42,12 @@ export class LobbyRx {
     throttleTime(REFRESH_THROTTLE_TIME)
   );
 
-  private queries$ = this.queryApi.getAll().pipe(
+  private queries$ = this.userRx.queryApi$.pipe(
+    switchMap((queryApi) => queryApi.getAll()),
     filter((queries): queries is Query[] => Array.isArray(queries)),
     map(toLobbies),
     // do not refCount to keep the firebase websocket open indefinitely,
-    // it should create less traffic then recreating the websocket over and over again
+    // it should create less traffic than recreating the websocket over and over again
     shareReplay({ refCount: false, bufferSize: 1 })
   );
 
@@ -62,17 +63,12 @@ export class LobbyRx {
 
   private regionLobbies$ = combineLatest([
     this.lobbies$,
-    this.userRx.region$.pipe(startWith(null)),
     this.authApi.firebaseUserId$,
   ]).pipe(
-    map(([lobbies, region, user]) => {
-      return lobbies
-        .filter((lobby) => !region || lobby.region === region)
-        .sort((lobby) => {
-          return lobby.queries.some((query) => query.playerId === user)
-            ? -1
-            : 1;
-        });
+    map(([lobbies, user]) => {
+      return lobbies.sort((lobby) => {
+        return lobby.queries.some((query) => query.playerId === user) ? -1 : 1;
+      });
     })
   );
 
@@ -90,13 +86,17 @@ export class LobbyRx {
   );
 
   joinedLobby$ = this.joinTrigger$.pipe(
-    withLatestFrom(this.userApi.user$, this.authApi.firebaseUserId$),
-    switchMap(([lobby, user, userId]) => {
+    withLatestFrom(
+      this.userApi.user$,
+      this.authApi.firebaseUserId$,
+      this.userRx.queryApi$
+    ),
+    switchMap(([lobby, user, userId, queryApi]) => {
       if (!user || !userId) {
         return EMPTY;
       }
 
-      return this.queryApi.set(userId, {
+      return queryApi.set(userId, {
         act: lobby.act,
         type: lobby.type,
         playerId: userId,
@@ -105,9 +105,13 @@ export class LobbyRx {
         maxLevel: lobby.maxLevel,
         difficulty: lobby.difficulty,
         maxPlayers: lobby.maxPlayers,
+        platform: lobby.platform,
         region: lobby.region,
         areas: user.areas,
         nick: user.nick ?? DEFAULT_NICK,
+        switchFriendCode: user.switchFriendCode,
+        playStationId: user.playStationId,
+        xboxGamertag: user.xboxGamertag,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
       });
     })
@@ -115,7 +119,6 @@ export class LobbyRx {
 
   constructor(
     private authApi: AuthApi,
-    private queryApi: QueryApi,
     private userRx: UserRx,
     private userApi: UserApi,
     private queryRx: QueryRx
