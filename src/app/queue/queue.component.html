@@ -75,12 +75,21 @@
     </ng-template>
 
     <div class="app-queue-form">
-      <berg-outlet [component]="operators.user.nick"></berg-outlet>
       <berg-outlet [component]="operators.user.region"></berg-outlet>
-      <berg-outlet [component]="operators.user.platform"></berg-outlet>
-      <berg-outlet [component]="operators.user.platformId$ | async"></berg-outlet>
-      <berg-outlet [component]="operators.user.refreshMode"></berg-outlet>
+      <div>
+        <berg-outlet [component]="operators.user.platform"></berg-outlet>
+        <berg-outlet [component]="operators.user.platformId$ | async"></berg-outlet>
+      </div>
+    </div>
+
+
+    <div class="app-queue-form">
+      <berg-outlet [component]="operators.user.nick"></berg-outlet>
       <berg-outlet [component]="operators.user.areas"></berg-outlet>
+    </div>
+
+    <div class="app-queue-form">
+      <berg-outlet [component]="operators.user.refreshMode"></berg-outlet>
       <berg-outlet [component]="operators.user.hintsMode"></berg-outlet>
     </div>
   </mat-tab>
