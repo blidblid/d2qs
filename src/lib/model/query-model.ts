@@ -69,7 +69,7 @@ export const QUEST: Type = 'quest';
 export const ALL_TYPES = [DUEL, FARM, RUN, QUEST];
 export const TYPE_LOCALE: Record<Type, string> = {
   duel: 'Duel',
-  farm: 'Farm',
+  farm: 'Split farm',
   run: 'Run',
   quest: 'Quest',
 };

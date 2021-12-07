@@ -158,7 +158,7 @@ export class QueryRx {
   typeHint$ = this.type$.pipe(
     switchMap((type) => {
       if (type === 'farm') {
-        return this.userRx.getHint('Spread out and farm.');
+        return this.userRx.getHint('Split up and farm.');
       }
 
       if (type === 'run') {
