@@ -106,6 +106,7 @@ export class LobbyRx {
         difficulty: lobby.difficulty,
         maxPlayers: lobby.maxPlayers,
         platform: lobby.platform,
+        ladder: lobby.ladder,
         region: lobby.region,
         areas: user.areas,
         nick: user.nick ?? DEFAULT_NICK,

@@ -41,6 +41,7 @@ const LOBBY: Lobby = {
   difficulty: 'nightmare',
   maxPlayers: 5,
   platform: 'pc',
+  ladder: 'scl',
   queries: [
     {
       areas: [
@@ -65,6 +66,7 @@ const LOBBY: Lobby = {
       playerId: 'ZcXGdREkQchB10lArfWiCAMkHSM2',
       region: 'eu',
       platform: 'pc',
+      ladder: 'scl',
       switchFriendCode: '',
       playStationId: '',
       xboxGamertag: '',
@@ -91,6 +93,7 @@ const LOBBY: Lobby = {
       playerId: 'wsf7zOCdqWNBTNfE6qSzYSvSxzg2',
       region: 'eu',
       platform: 'pc',
+      ladder: 'scl',
       switchFriendCode: '',
       playStationId: '',
       xboxGamertag: '',
@@ -120,6 +123,7 @@ const LOBBY: Lobby = {
       playerId: 'fTf8N0WGFKQdaDUmoZ4rndG3nV73',
       region: 'eu',
       platform: 'pc',
+      ladder: 'scl',
       switchFriendCode: '',
       playStationId: '',
       xboxGamertag: '',
@@ -149,6 +153,7 @@ const LOBBY: Lobby = {
       playerId: 'fTf8N0WGFKQdaDUmoZ4rndG3nV73',
       region: 'eu',
       platform: 'pc',
+      ladder: 'scl',
       switchFriendCode: '',
       playStationId: '',
       xboxGamertag: '',
@@ -178,6 +183,7 @@ const LOBBY: Lobby = {
       playerId: 'fTf8N0WGFKQdaDUmoZ4rndG3nV75',
       region: 'eu',
       platform: 'pc',
+      ladder: 'scl',
       switchFriendCode: '',
       playStationId: '',
       xboxGamertag: '',

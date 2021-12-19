@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BergInputComponent, BergSelectComponent } from '@berglund/material';
 import { component } from '@berglund/mixins';
 import {
+  ALL_LADDERS,
   ALL_PLATFORMS,
   ALL_REGIONS,
   ALWAYS,
@@ -11,6 +12,8 @@ import {
   FARM_AREAS,
   HintsMode,
   HINTS_MODE_LOCALE,
+  Ladder,
+  LADDER_LOCALE,
   MANUAL,
   NEVER,
   Platform,
@@ -53,6 +56,16 @@ export class UserOperators {
       connect: this.rx.user.platform$,
       data: ALL_PLATFORMS,
       pluckLabel: (value: Platform) => PLATFORM_LOCALE[value],
+    },
+  });
+
+  ladder = component({
+    component: BergSelectComponent,
+    inputs: {
+      label: 'Ladder',
+      connect: this.rx.user.ladder$,
+      data: ALL_LADDERS,
+      pluckLabel: (value: Ladder) => LADDER_LOCALE[value],
     },
   });
 

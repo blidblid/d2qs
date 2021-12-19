@@ -8,72 +8,15 @@
         ".read": true
       }
     },
-    "eu": {
+    "queries": {
       ".read": true,
-      "pc": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "switch": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "ps": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "xbox": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      }
-    },
-    "us": {
-      ".read": true,
-      "pc": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "switch": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "ps": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "xbox": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      }
-    },
-    "asia": {
-      ".read": true,
-      "pc": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "switch": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "ps": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
-        }
-      },
-      "xbox": {
-        "$id": {
-          ".write": "auth !== null && auth.uid === $id"
+      "$region": {
+        "$platform": {
+          "$ladder": {
+            "$id": {
+              ".write": "auth !== null && auth.uid === $id"
+            }
+          }
         }
       }
     },

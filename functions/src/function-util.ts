@@ -59,12 +59,23 @@ export function lobbyToPlayers(lobby: Lobby): Player[] {
   }
 
   function queryToPlayer(query: Query): Player {
-    return {
+    const player: Player = {
       nick: query.nick,
-      switchFriendCode: query.switchFriendCode,
-      playStationId: query.playStationId,
-      xboxGamertag: query.xboxGamertag,
     };
+
+    if (query.switchFriendCode) {
+      player.switchFriendCode = query.switchFriendCode;
+    }
+
+    if (query.playStationId) {
+      player.playStationId = query.playStationId;
+    }
+
+    if (query.xboxGamertag) {
+      player.xboxGamertag = query.xboxGamertag;
+    }
+
+    return player;
   }
 }
 

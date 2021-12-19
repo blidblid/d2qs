@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { CrudApi } from '@berglund/firebase';
-import { Platform, Region } from '@d2qs/model';
+import { Ladder, Platform, Region } from '@d2qs/model';
 import { Observable } from 'rxjs';
 import { Query } from '../../model/query-model';
 
@@ -8,8 +8,11 @@ import { Query } from '../../model/query-model';
 export class QueryApiFactory {
   constructor(private injector: Injector) {}
 
-  getApi(region: Region, platform: Platform): QueryApi {
-    return new QueryApi(this.injector, [region, platform].join('/'));
+  getApi(region: Region, platform: Platform, ladder: Ladder): QueryApi {
+    return new QueryApi(
+      this.injector,
+      ['queries', region, platform, ladder].join('/')
+    );
   }
 }
 
@@ -40,6 +43,18 @@ export class QueryApi extends CrudApi<Query> {
 
     if (minified.type !== 'run') {
       delete minified.runArea;
+    }
+
+    if (minified.platform !== 'switch') {
+      delete minified.switchFriendCode;
+    }
+
+    if (minified.platform !== 'ps') {
+      delete minified.playStationId;
+    }
+
+    if (minified.platform !== 'xbox') {
+      delete minified.xboxGamertag;
     }
 
     return minified;

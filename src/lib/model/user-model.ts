@@ -4,10 +4,11 @@ export interface Preferences {
   areas: Area[];
   region: Region;
   platform: Platform;
+  ladder: Ladder;
   nick: string;
-  switchFriendCode: string;
-  playStationId: string;
-  xboxGamertag: string;
+  switchFriendCode?: string;
+  playStationId?: string;
+  xboxGamertag?: string;
 }
 
 export interface Config {
@@ -22,7 +23,7 @@ export interface User extends Entity, Config, Preferences {
 
 export const DEFAULT_NICK = '';
 
-export type Region = 'eu' | 'us' | 'asia';
+export type Region = typeof EU | typeof US | typeof ASIA;
 export const EU = 'eu';
 export const US = 'us';
 export const ASIA = 'asia';
@@ -34,7 +35,7 @@ export const REGION_LOCALE = {
 export const DEFAULT_REGION = EU;
 export const ALL_REGIONS = [EU, US, ASIA];
 
-export type Platform = 'pc' | 'switch' | 'ps' | 'xbox';
+export type Platform = typeof PC | typeof SWITCH | typeof PS | typeof XBOX;
 export const PC = 'pc';
 export const SWITCH = 'switch';
 export const PS = 'ps';
@@ -53,25 +54,43 @@ export const PLATFORM_ID_LOCALE = {
 export const DEFAULT_PLATFORM = PC;
 export const ALL_PLATFORMS = [PC, SWITCH, PS, XBOX];
 
+export type Ladder =
+  | typeof SC_LADDER
+  | typeof HC_LADDER
+  | typeof SC_NON_LADDER
+  | typeof HC_NON_LADDER;
+export const SC_LADDER = 'scl';
+export const HC_LADDER = 'hcl';
+export const SC_NON_LADDER = 'scnl';
+export const HC_NON_LADDER = 'hcnl';
+export const LADDER_LOCALE = {
+  [SC_LADDER]: 'Softcore ladder',
+  [HC_LADDER]: 'Hardcore ladder',
+  [SC_NON_LADDER]: 'Softcore non-ladder',
+  [HC_NON_LADDER]: 'Hardcore non-ladder',
+};
+export const DEFAULT_LADDER = SC_NON_LADDER;
+export const ALL_LADDERS = [SC_LADDER, HC_LADDER, SC_NON_LADDER, HC_NON_LADDER];
+
 export type Area =
-  | 'ancient_tunnels'
-  | 'andariel'
-  | 'arcane_sanctuary'
-  | 'baal'
-  | 'cow'
-  | 'diablo'
-  | 'countess'
-  | 'lower_kurast'
-  | 'mausoleum'
-  | 'nihlathak'
-  | 'mephisto'
-  | 'pindleskin'
-  | 'pit'
-  | 'river_of_flame'
-  | 'tomb'
-  | 'travincal'
-  | 'tristram'
-  | 'worldstone_keep';
+  | typeof ANCIENT_TUNNELS
+  | typeof ANDARIEL
+  | typeof ARCANE_SANCTUARY
+  | typeof BAAL
+  | typeof COW
+  | typeof DIABLO
+  | typeof COUNTESS
+  | typeof LOWER_KURAST
+  | typeof MAUSOLEUM
+  | typeof NIHLATHAK
+  | typeof MEPHISTO
+  | typeof PINDLESKIN
+  | typeof PIT
+  | typeof RIVER_OF_FLAME
+  | typeof TOMBS
+  | typeof TRAVINCAL
+  | typeof TRISTRAM
+  | typeof WORLDSTONE_KEEP;
 export const ANCIENT_TUNNELS = 'ancient_tunnels';
 export const ANDARIEL = 'andariel';
 export const ARCANE_SANCTUARY = 'arcane_sanctuary';
@@ -117,7 +136,7 @@ export const FARM_AREAS = AREAS.filter(
   (area: Area) => !RUN_ONLY_AREAS.includes(area)
 );
 
-export type RefreshMode = 'auto' | 'manual';
+export type RefreshMode = typeof AUTO | typeof MANUAL;
 export const AUTO = 'auto';
 export const MANUAL = 'manual';
 export const REFRESH_MODE_LOCALE = {
@@ -126,7 +145,7 @@ export const REFRESH_MODE_LOCALE = {
 };
 export const DEFAULT_REFRESH_MODE = AUTO;
 
-export type HintsMode = 'always' | 'never';
+export type HintsMode = typeof ALWAYS | typeof NEVER;
 export const ALWAYS = 'always';
 export const NEVER = 'never';
 export const DEFAULT_SHOW_HINTS: HintsMode = ALWAYS;

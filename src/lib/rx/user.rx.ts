@@ -6,12 +6,14 @@ import { AuthApi, QueryApiFactory, UserApi } from '@d2qs/api';
 import {
   ALWAYS,
   Area,
+  DEFAULT_LADDER,
   DEFAULT_NICK,
   DEFAULT_PLATFORM,
   DEFAULT_REFRESH_MODE,
   DEFAULT_REGION,
   DEFAULT_SHOW_HINTS,
   HintsMode,
+  Ladder,
   Platform,
   RefreshMode,
   Region,
@@ -46,18 +48,29 @@ export class UserRx {
     [Validators.required]
   );
 
+  ladder$ = userInput<Ladder>(
+    this.getInitialProperty('ladder', DEFAULT_LADDER),
+    [Validators.required]
+  );
+
   switchFriendCode$ = userInput<string>(
-    this.getInitialProperty('switchFriendCode', ''),
+    this.getInitialProperty('switchFriendCode', '').pipe(
+      map((value) => value ?? '')
+    ),
     [Validators.required]
   );
 
   playStationId$ = userInput<string>(
-    this.getInitialProperty('playStationId', ''),
+    this.getInitialProperty('playStationId', '').pipe(
+      map((value) => value ?? '')
+    ),
     [Validators.required]
   );
 
   xboxGamertag$ = userInput<string>(
-    this.getInitialProperty('xboxGamertag', ''),
+    this.getInitialProperty('xboxGamertag', '').pipe(
+      map((value) => value ?? '')
+    ),
     [Validators.required]
   );
 
@@ -81,10 +94,11 @@ export class UserRx {
     this.xboxGamertag$.pipe(startWith('')),
   ]);
 
-  preferences$ = combineLatest([
+  queryPreferences$ = combineLatest([
     this.region$,
     this.areas$,
     this.nick$,
+    this.ladder$,
     this.platformPreferences$,
   ]);
 
@@ -123,10 +137,10 @@ export class UserRx {
   queryApi$ = this.authApi.firebaseUserId$.pipe(
     filter((userId) => userId !== null),
     switchMap(() => {
-      return combineLatest([this.region$, this.platform$]).pipe(
+      return combineLatest([this.region$, this.platform$, this.ladder$]).pipe(
         debounceTime(0),
-        map(([region, platform]) => {
-          return this.queryApiFactory.getApi(region, platform);
+        map(([region, platform, ladder]) => {
+          return this.queryApiFactory.getApi(region, platform, ladder);
         })
       );
     }),
@@ -134,24 +148,24 @@ export class UserRx {
   );
 
   private userUpdates$ = combineLatest([
-    this.nick$,
-    this.region$,
-    this.areas$,
     this.refreshMode$,
     this.hintsMode$,
-    this.platformPreferences$,
+    this.queryPreferences$,
   ]).pipe(
     debounceTime(0),
     withLatestFrom(this.authApi.firebaseUserId$),
     switchMap(
       ([
         [
-          nick,
-          region,
-          areas,
           refreshMode,
           hintsMode,
-          [platform, switchFriendCode, playStationId, xboxGamertag],
+          [
+            region,
+            areas,
+            nick,
+            ladder,
+            [platform, switchFriendCode, playStationId, xboxGamertag],
+          ],
         ],
         user,
       ]) => {
@@ -161,6 +175,7 @@ export class UserRx {
               region,
               platform,
               areas,
+              ladder,
               hintsMode,
               refreshMode,
               switchFriendCode,

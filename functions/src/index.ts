@@ -3,12 +3,13 @@ import * as functions from 'firebase-functions';
 import { environment as devEnvironment } from '../../src/environments/environment';
 import { environment } from '../../src/environments/environment.prod';
 import {
-  ALL_PLATFORMS,
-  ALL_REGIONS,
   FARM,
   Game,
+  Ladder,
+  Platform,
   Query,
   QUEST,
+  Region,
   toLobbies,
 } from '../../src/lib/model';
 import {
@@ -22,78 +23,72 @@ admin.initializeApp(
     .firebase
 );
 
-// dynamically export functions for all regions and platforms
-for (const region of ALL_REGIONS) {
-  for (const platform of ALL_PLATFORMS) {
-    const path = [region, platform].join('/');
-    const name = [region, platform].map(capitalize).join('');
+exports[`createLobbyFromCreate`] = functions.database
+  .ref('queries')
+  .onCreate((data) => createGame(data.val()));
 
-    exports[`create${name}LobbyFromCreate`] = functions.database
-      .ref(path)
-      .onCreate((data) => gameFromCreate(data, path));
-
-    exports[`create${name}LobbyFromUpdate`] = functions.database
-      .ref(path)
-      .onUpdate((data) => gameFromUpdate(data, path));
-  }
-}
-
-async function gameFromUpdate(
-  data: functions.Change<functions.database.DataSnapshot>,
-  path: string
-): Promise<void> {
-  return await createGame(data.after.val(), path);
-}
-
-async function gameFromCreate(
-  data: functions.database.DataSnapshot,
-  path: string
-): Promise<void> {
-  return await createGame(data.val(), path);
-}
+exports[`createLobbyFromUpdate`] = functions.database
+  .ref('queries')
+  .onUpdate((data) => createGame(data.after.val()));
 
 async function createGame(
-  value: functions.database.DataSnapshot,
-  path: string
+  value: Record<Region, Record<Platform, Record<Ladder, Record<string, Query>>>>
 ): Promise<void> {
-  const queries: Query[] = Object.values(value ?? {});
+  for (const region of Object.keys(value ?? {}) as Region[]) {
+    for (const platform of Object.keys(value[region] ?? {}) as Platform[]) {
+      for (const ladder of Object.keys(
+        value[region][platform] ?? {}
+      ) as Ladder[]) {
+        const queries: Query[] = Object.values(
+          value[region][platform][ladder] ?? {}
+        );
 
-  for (const lobby of toLobbies(queries)) {
-    if (lobby.queries.length < lobby.maxPlayers) {
-      continue;
-    }
+        for (const lobby of toLobbies(queries)) {
+          if (lobby.queries.length < lobby.maxPlayers) {
+            continue;
+          }
 
-    const gameName = generateGameName(
-      lobby.type === QUEST || lobby.type === FARM
-    );
+          const gameName = generateGameName(
+            lobby.type === QUEST || lobby.type === FARM
+          );
 
-    const queries = lobby.queries.filter((_, index) => {
-      return index < lobby.maxPlayers;
-    });
+          const queries = lobby.queries.filter((_, index) => {
+            return index < lobby.maxPlayers;
+          });
 
-    const players = lobbyToPlayers(lobby);
+          const players = lobbyToPlayers(lobby);
 
-    const game: Game = {
-      lobby,
-      gameName,
-      players,
-      timestamp: admin.database.ServerValue.TIMESTAMP as number,
-    };
+          const game: Game = {
+            lobby,
+            gameName,
+            players,
+            timestamp: admin.database.ServerValue.TIMESTAMP as number,
+          };
 
-    if (lobby.type === 'farm') {
-      game.unassignedAreas = getUnassignedAreas(players);
-    }
+          if (lobby.type === 'farm') {
+            game.unassignedAreas = getUnassignedAreas(players);
+          }
 
-    for (const query of queries) {
-      const ref = await admin.database().ref('games').push(game);
+          for (const query of queries) {
+            const ref = await admin.database().ref('games').push(game);
 
-      if (ref.key) {
-        admin
-          .database()
-          .ref(['users', query.playerId, 'gameId'].join('/'))
-          .set(ref.key);
+            if (ref.key) {
+              admin
+                .database()
+                .ref(['users', query.playerId, 'gameId'].join('/'))
+                .set(ref.key);
 
-        admin.database().ref([path, query.playerId].join('/')).remove();
+              admin
+                .database()
+                .ref(
+                  ['queries', region, platform, ladder, query.playerId].join(
+                    '/'
+                  )
+                )
+                .remove();
+            }
+          }
+        }
       }
     }
   }

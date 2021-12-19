@@ -90,7 +90,7 @@ export class QueryRx {
 
   query$: Observable<Query> = combineLatest([
     this.queryForm$,
-    this.userRx.preferences$,
+    this.userRx.queryPreferences$,
     this.authApi.firebaseUserId$,
   ]).pipe(
     map(
@@ -188,7 +188,7 @@ export class QueryRx {
     merge(
       this.leaveTrigger$,
       this.queryForm$.pipe(skip(1)), // skip initial query form
-      this.userRx.preferences$.pipe(skip(2)) // skip initial preferences and initial request
+      this.userRx.queryPreferences$.pipe(skip(2)) // skip initial preferences and initial request
     ),
     (user, queryApi) => (user ? queryApi.delete(user) : EMPTY),
     switchMap,
@@ -200,11 +200,12 @@ export class QueryRx {
     this.authApi.firebaseUserId$,
     this.userRx.region$,
     this.userRx.platform$,
+    this.userRx.ladder$,
   ]).pipe(
-    mergeMap(([user, region, platform]) => {
+    mergeMap(([user, region, platform, ladder]) => {
       return user && region && platform
         ? this.angularFireDatabase.database
-            .ref([region, platform, user].join('/'))
+            .ref(['queries', region, platform, ladder, user].join('/'))
             .onDisconnect()
             .remove()
         : EMPTY;
