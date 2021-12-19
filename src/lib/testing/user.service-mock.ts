@@ -13,6 +13,7 @@ export const MOCK_USER_DATABASE: Record<string, User> = {
     hintsMode: 'always',
     refreshMode: 'auto',
     platform: 'pc',
+    ladder: 'scl',
     region: 'eu',
     switchFriendCode: '',
     playStationId: '',

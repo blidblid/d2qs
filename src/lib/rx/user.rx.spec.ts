@@ -70,6 +70,7 @@ describe('user rx', () => {
         refreshMode: MOCK_USER_DATABASE[MOCK_USER_ID].refreshMode,
         hintsMode: MOCK_USER_DATABASE[MOCK_USER_ID].hintsMode,
         platform: MOCK_USER_DATABASE[MOCK_USER_ID].platform,
+        ladder: MOCK_USER_DATABASE[MOCK_USER_ID].ladder,
         switchFriendCode: MOCK_USER_DATABASE[MOCK_USER_ID].switchFriendCode,
         playStationId: MOCK_USER_DATABASE[MOCK_USER_ID].playStationId,
         xboxGamertag: MOCK_USER_DATABASE[MOCK_USER_ID].xboxGamertag,
