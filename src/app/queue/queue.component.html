@@ -75,8 +75,11 @@
     </ng-template>
 
     <div class="app-queue-form">
-      <berg-outlet [component]="operators.user.region"></berg-outlet>
-      <berg-outlet [component]="operators.user.ladder"></berg-outlet>
+      <div>
+        <berg-outlet [component]="operators.user.region"></berg-outlet>
+        <berg-outlet [component]="operators.user.ladder"></berg-outlet>
+      </div>
+
       <div>
         <berg-outlet [component]="operators.user.platform"></berg-outlet>
         <berg-outlet [component]="operators.user.platformId$ | async"></berg-outlet>
